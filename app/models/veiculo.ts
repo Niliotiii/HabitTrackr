@@ -1,5 +1,7 @@
+import Categoria from '#models/categoria'
+import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 export default class Veiculo extends BaseModel {
   @column({ isPrimary: true })
@@ -13,7 +15,7 @@ export default class Veiculo extends BaseModel {
 
   @column()
   declare anoFabricacao: number
-  
+
   @column()
   declare anoModelo: number
 
@@ -27,6 +29,9 @@ export default class Veiculo extends BaseModel {
   declare cor: string
 
   @column()
+  declare valor: number
+
+  @column()
   declare situacao: string
 
   @column()
@@ -37,4 +42,10 @@ export default class Veiculo extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @column()
+  declare categoriaId: number
+
+  @belongsTo(() => Categoria, { foreignKey: 'categoriaId' })
+  declare categoria: BelongsTo<typeof Categoria>
 }

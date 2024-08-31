@@ -1,5 +1,5 @@
 {
-  "name": "app-habittrackr",
+  "name": "app-loki-car",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -11,8 +11,7 @@
     "test": "node ace test",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "typecheck": "tsc --noEmit",
-    "build:assets": "node ace build --assets"
+    "typecheck": "tsc --noEmit"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
