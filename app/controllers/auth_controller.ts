@@ -1,31 +1,41 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import User from '../models/user.js'
+import User from '#models/user'
+import { HttpContext } from '@adonisjs/core/http'
 
 export default class AuthController {
-  async register({ request, auth, response }: HttpContextContract) {
+  // async register({ request, auth, response }: HttpContextContract) {
+  //   const { email, password } = request.only(['email', 'password'])
+
+  //   // Cria um novo usuário
+  //   const user = await User.create({ email, password })
+
+  //   // Loga o usuário automaticamente
+  //   await auth.login(user)
+
+  //   return response.redirect('/')
+  // }
+
+  async login({ request, auth, response, session }: HttpContext) {
     const { email, password } = request.only(['email', 'password'])
 
-    // Cria um novo usuário
-    const user = await User.create({ email, password })
+    try {
+      // Tenta autenticar o usuário
+      const user = await User.verifyCredentials(email, password)
+      await auth.use('web').login(user)
 
-    // Loga o usuário automaticamente
-    await auth.login(user)
+      // Redireciona para uma rota protegida
+      response.redirect('/')
+    } catch (error) {
+      // Define uma mensagem de erro na sessão
+      session.flash({ error: 'Credenciais inválidas. Por favor, tente novamente.' })
 
-    return response.redirect('/')
+      // Redireciona de volta para a página de login
+      response.redirect('back')
+    }
   }
 
-  async login({ request, auth, response }: HttpContextContract) {
-    const { email, password } = request.only(['email', 'password'])
+  // async logout({ auth, response }: HttpContextContract) {
+  //   await auth.logout()
 
-    // Tenta autenticar o usuário
-    await auth.attempt(email, password)
-
-    return response.redirect('/')
-  }
-
-  async logout({ auth, response }: HttpContextContract) {
-    await auth.logout()
-
-    return response.redirect('/')
-  }
+  //   return response.redirect('/')
+  // }
 }
