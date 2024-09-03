@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import User from 'App/Models/User'
+import User from '../models/user.js'
 
 export default class AuthController {
   async register({ request, auth, response }: HttpContextContract) {
