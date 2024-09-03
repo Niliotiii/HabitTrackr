@@ -1,15 +1,15 @@
 import User from '#models/user'
-import type { HttpContext } from '@adonisjs/core/http'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class UserController {
   // Buscar todos os usuários
-  public async index({}: HttpContext) {
+  public async index({}: HttpContextContract) {
     const users = await User.all()
     return users
   }
 
   // Criar um novo usuário
-  public async store({ request, response }: HttpContext) {
+  public async store({ request, response }: HttpContextContract) {
     const data = request.only(['name', 'email', 'password', 'dateOfBirth', 'sex'])
 
     try {
@@ -23,7 +23,7 @@ export default class UserController {
   }
 
   // Buscar um usuário por ID
-  public async show({ params, response }: HttpContext) {
+  public async show({ params, response }: HttpContextContract) {
     try {
       const user = await User.findOrFail(params.id)
       return user
@@ -33,7 +33,7 @@ export default class UserController {
   }
 
   // Editar/Atualizar um usuário
-  public async update({ params, request, response }: HttpContext) {
+  public async update({ params, request, response }: HttpContextContract) {
     const data = request.only(['name', 'email', 'password', 'dateOfBirth', 'sex'])
 
     try {
@@ -47,7 +47,7 @@ export default class UserController {
   }
 
   // Deletar um usuário
-  public async destroy({ params, response }: HttpContext) {
+  public async destroy({ params, response }: HttpContextContract) {
     try {
       const user = await User.findOrFail(params.id)
       await user.delete()
