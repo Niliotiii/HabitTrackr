@@ -16,6 +16,7 @@ const AuthController = () => import('#controllers/auth_controller')
 const HabitController = () => import('#controllers/habits_controller')
 const GoalController = () => import('#controllers/goal_controller')
 const ActivityRegister = () => import('#controllers/activity_register_controller')
+const DashboardController = () => import('#controllers/dashboard_controller')
 
 // Front
 router.on('/login').render('pages/auth/login')
@@ -23,7 +24,7 @@ router.on('/register').render('pages/auth/register')
 
 router
   .group(() => {
-    router.on('/').render('pages/home')
+    // router.on('/').render('pages/home')
     router.on('/autor').render('pages/autor')
     router.on('/user-edit').render('pages/users/user-edit')
 
@@ -42,6 +43,8 @@ router
       await auth.use('web').logout()
       return response.redirect('/login')
     })
+
+    router.get('/', [DashboardController, 'index'])
 
     router.post('/user-edit/:id', [UserController, 'update'])
     router.post('/user-delete/:id', [UserController, 'destroy'])
