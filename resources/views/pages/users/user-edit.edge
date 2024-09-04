@@ -23,9 +23,9 @@
               Editar Dados de Perfil
             </h4>
             <p class="card-description">
-              Atualize suas informações pessoais
+              Atualize suas informações pessoais ou exclua seu perfil
             </p>
-            <form class="forms-sample" method="POST" action="/users/{{ auth.user.id }}">
+            <form class="forms-sample" method="POST" action="/user-edit/{{ auth.user.id }}">
               {{ csrfField() }}
               <input type="hidden" name="_method" value="PUT" />
 
@@ -91,12 +91,33 @@
                 </select>
               </div>
 
-              <button type="submit" class="btn btn-primary mr-2">Salvar</button>
-              <a href="/" class="btn btn-dark">Cancelar</a>
+              <div class="d-flex">
+                <button type="submit" class="btn btn-primary mr-2">Salvar</button>
+                <a href="/" class="btn btn-dark mr-auto">Cancelar</a>
+                <button type="button" class="btn btn-danger ml-auto" onclick="confirmDeletion()">Excluir Perfil</button>
+              </div>
+            </form>
+            <form
+              id="deleteProfileForm"
+              method="POST"
+              action="/user-delete/{{ auth.user.id }}"
+              style="display: none;"
+            >
+              {{ csrfField() }}
+              <input type="hidden" name="_method" value="DELETE" />
             </form>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- JavaScript para confirmação de exclusão -->
+  <script>
+    function confirmDeletion() {
+      if (confirm("Tem certeza que deseja excluir seu perfil? Esta ação não pode ser desfeita.")) {
+        document.getElementById("deleteProfileForm").submit();
+      }
+    }
+  </script>
 @end

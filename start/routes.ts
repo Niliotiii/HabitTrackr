@@ -38,8 +38,8 @@ router
       return response.redirect('/login')
     })
 
-    router.post('/users/:id', [UserController, 'update'])
-    router.resource('users', UserController).apiOnly()
+    router.post('/user-edit/:id', [UserController, 'update'])
+    router.post('/user-delete/:id', [UserController, 'destroy'])
     router.resource('categories', CategoryController)
     router.resource('habits', HabitController).apiOnly()
   })

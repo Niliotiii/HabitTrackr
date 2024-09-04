@@ -59,11 +59,17 @@ export default class UserController {
   }
 
   // Deletar um usuário
-  public async destroy({ params, response }: HttpContextContract) {
+  public async destroy({ params, response, auth }: HttpContextContract) {
     try {
       const user = await User.findOrFail(params.id)
+      const authenticatedUser = await auth.authenticate()
+
+      if (authenticatedUser.id !== user.id) {
+        return response.status(403).json({ error: 'Não autorizado a deletar este usuário' })
+      }
+
       await user.delete()
-      return response.status(204).json({})
+      return response.redirect('/login')
     } catch (error) {
       return response.status(400).json({ error: 'Erro ao deletar usuário' })
     }
