@@ -23,7 +23,6 @@
                 <th>#</th>
                 <th>Nome</th>
                 <th>Descrição</th>
-                <th>Ativo?</th>
                 <th>Cor</th> <!-- Nova coluna para cor visual -->
                 <th>Opções</th>
               </tr>
@@ -41,7 +40,6 @@
                 <td>{{ index + 1 }}</td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.description }}</td>
-                <td>{{item.status == 'active' ? 'Sim' : 'Não'}}</td>
                 <td> <!-- Exibindo a cor visual -->
                   <div style="display: flex; align-items: center;">
                     <span style="display: inline-block; width: 20px; height: 20px; background-color: {{ item.visualIdentificationColor }}; border: 1px solid #ccc; margin-right: 8px;"></span>

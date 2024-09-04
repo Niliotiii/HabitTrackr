@@ -24,7 +24,6 @@
                 <th>Nome</th>
                 <th>Descrição</th>
                 <th>Prioridade</th>
-                <th>Status</th>
                 <th>Categoria</th>
                 <th>Opções</th>
               </tr>
@@ -43,7 +42,6 @@
                 <td>{{ habit.name }}</td>
                 <td>{{ habit.description }}</td>
                 <td>{{ habit.priority }}</td>
-                <td>{{ habit.status == 'active' ? 'Ativo' : 'Inativo' }}</td>
                 <td>{{ habit.category ? habit.category.name : 'Sem Categoria' }}</td>
                 <td>
                   <a href="{{ route('habits.edit', [habit.id]) }}" class="button mr-1">

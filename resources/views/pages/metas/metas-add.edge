@@ -110,14 +110,17 @@
   // Calcula a quantidade automaticamente com base na frequência e nas datas
   function calculateQuantity() {
     const frequencia = document.getElementById('inputFrequencia').value;
-    const startDate = new Date(document.getElementById('inputStartDate').value);
-    const endDate = new Date(document.getElementById('inputEndDate').value);
+    const startDateValue = document.getElementById('inputStartDate').value;
+    const endDateValue = document.getElementById('inputEndDate').value;
 
-    if (!startDate || !endDate || endDate <= startDate) {
+    // Verificar se as datas estão preenchidas e válidas
+    if (!startDateValue || !endDateValue || new Date(endDateValue) <= new Date(startDateValue)) {
       document.getElementById('inputQuantity').value = 0;
       return;
     }
 
+    const startDate = new Date(startDateValue);
+    const endDate = new Date(endDateValue);
     const timeDiff = Math.abs(endDate - startDate);
     const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
@@ -144,6 +147,15 @@
 
   document.getElementById('goalForm').addEventListener('submit', function(event) {
     const habitId = document.getElementById('inputHabit').value;
+    const startDateValue = document.getElementById('inputStartDate').value;
+    const endDateValue = document.getElementById('inputEndDate').value;
+
+    // Verificar se a data de fim é anterior à data de início
+    if (new Date(endDateValue) <= new Date(startDateValue)) {
+      alert('A data de fim deve ser posterior à data de início.');
+      event.preventDefault();
+      return;
+    }
 
     if (!habitId) {
       alert('O campo Hábito é obrigatório.');
