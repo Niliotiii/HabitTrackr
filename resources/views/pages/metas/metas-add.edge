@@ -116,9 +116,8 @@
     border: 1px solid #495057; /* Borda padrão */
   }
 </style>
-
 <script>
-  // Calcula a quantidade automaticamente com base na frequência e nas datas
+  // Função para calcular a quantidade automaticamente com base na frequência e nas datas
   function calculateQuantity() {
     const frequencia = document.getElementById('inputFrequencia').value;
     const startDateValue = document.getElementById('inputStartDate').value;
@@ -130,13 +129,13 @@
       return;
     }
 
-    const startDate = new Date(startDateValue);
-    const endDate = new Date(endDateValue);
+    // Criação das datas em UTC para evitar problemas de fuso horário
+    const startDate = new Date(startDateValue + 'T00:00:00'); // Forçando o horário para meia-noite
+    const endDate = new Date(endDateValue + 'T00:00:00'); // Forçando o horário para meia-noite
 
-    // Calcular a diferença corretamente usando UTC para evitar problemas de fuso horário
-    const timeDiff = Math.abs(Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()) - 
-                              Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()));
-    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1; // Adiciona 1 para incluir o último dia
+    // Calcular a diferença corretamente, incluindo o último dia sem adicionar ou remover manualmente
+    const timeDiff = endDate - startDate; // diferença em milissegundos
+    const daysDiff = Math.round(timeDiff / (1000 * 60 * 60 * 24)); // +1 para incluir o último dia
 
     let quantity = 0;
     switch (frequencia) {

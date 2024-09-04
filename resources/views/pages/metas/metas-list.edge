@@ -21,6 +21,7 @@
             <thead>
               <tr>
                 <th>#</th>
+                <th>Nome</th> <!-- Coluna de Nome -->
                 <th>Frequência</th>
                 <th>Quantidade</th>
                 <th>Data de Início</th>
@@ -41,6 +42,7 @@
               @each((goal, index) in goals)
               <tr>
                 <td>{{ index + 1 }}</td>
+                <td>{{ goal.name || '' }}</td> <!-- Exibir o valor de name ou vazio -->
                 <td>{{ goal.frequencia }}</td>
                 <td>{{ goal.quantity }}</td>
                 <td>{{ goal.start_date.toFormat('dd/MM/yyyy') }}</td>
