@@ -1,8 +1,6 @@
 @layout()
 <div class="page-header">
-  <h3 class="page-title"> Hábito -
-    {{ !habit ? 'Novo': `Atualização: ${habit.name}` }}
-  </h3>
+  <h3 class="page-title"> Hábito - {{ !habit ? 'Novo' : `Atualização: ${habit.name}` }} </h3>
 </div>
 
 <div class="row">
@@ -10,24 +8,23 @@
     <div class="card">
       <div class="card-body">
         <form class="forms-sample" method="POST" id="habitForm"
-          action="
-          {{ !habit ?
-            route('habits.store') :
-            route('habits.update', { id: habit.id }, { qs: { _method: 'PUT' } })
-          }}">
+          action="{{ !habit ? route('habits.store') : route('habits.update', { id: habit.id }, { qs: { _method: 'PUT' } }) }}">
 
           {{ csrfField() }}
 
+          <!-- Nome do Hábito -->
           <div class="form-group">
             <label for="inputName">Nome do Hábito</label>
-            <input type="text" class="form-control" id="inputName"
-              value="{{ old('name') || habit?.name || '' }}" name="name" placeholder="Informe o nome do hábito" required>
+            <input type="text" class="form-control" id="inputName" 
+              value="{{ old('name') || habit?.name || '' }}" name="name" 
+              placeholder="Informe o nome do hábito" required>
 
             @inputError('name')
             <span class="text-danger"> {{ $messages.join(', ') }} </span>
             @end
           </div>
 
+          <!-- Descrição -->
           <div class="form-group">
             <label for="inputDescription">Descrição</label>
             <textarea class="form-control" id="inputDescription" name="description" rows="4"
@@ -38,6 +35,7 @@
             @end
           </div>
 
+          <!-- Prioridade e Status -->
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="inputPriority">Prioridade</label>
@@ -52,12 +50,8 @@
             <div class="form-group col-md-6">
               <label for="inputStatus">Status</label>
               <select class="form-control" id="inputStatus" name="status">
-                <option value="active" {{ old('status') == 'active' || habit?.status == 'active' ? 'selected' : '' }}>
-                  Ativo
-                </option>
-                <option value="inactive" {{ old('status') == 'inactive' || habit?.status == 'inactive' ? 'selected' : '' }}>
-                  Inativo
-                </option>
+                <option value="active" {{ old('status') == 'active' || habit?.status == 'active' ? 'selected' : '' }}>Ativo</option>
+                <option value="inactive" {{ old('status') == 'inactive' || habit?.status == 'inactive' ? 'selected' : '' }}>Inativo</option>
               </select>
 
               @inputError('status')
@@ -65,6 +59,8 @@
               @end
             </div>
           </div>
+
+          <!-- Categoria -->
           <div class="form-group">
             <label for="inputCategory">Categoria</label>
             <select class="form-control" id="inputCategory" name="categoryId" required>
@@ -81,6 +77,7 @@
             @end
           </div>
 
+          <!-- Botões de ação -->
           <button type="submit" class="btn btn-primary mr-2">Salvar</button>
           <a href="{{ route('habits.index') }}" class="btn btn-dark">Cancelar</a>
         </form>
@@ -88,38 +85,39 @@
     </div>
   </div>
 </div>
+
 @end
 
 <script>
   document.getElementById('habitForm').addEventListener('submit', function(event) {
-    // Pegando os valores dos campos de nome, descrição, prioridade e categoria
+    // Pegando os valores dos campos
     const name = document.getElementById('inputName').value.trim();
     const description = document.getElementById('inputDescription').value.trim();
     const priority = document.getElementById('inputPriority').value.trim();
     const category = document.getElementById('inputCategory').value;
 
-    // Verificando se os campos estão vazios ou inválidos
+    // Verificando se os campos estão válidos
     if (!name) {
       alert('O campo Nome é obrigatório.');
-      event.preventDefault(); // Impede o envio do formulário
+      event.preventDefault();
       return;
     }
 
     if (!description) {
       alert('O campo Descrição é obrigatório.');
-      event.preventDefault(); // Impede o envio do formulário
+      event.preventDefault();
       return;
     }
 
     if (!priority || isNaN(priority) || priority <= 0) {
       alert('O campo Prioridade deve ser um número válido.');
-      event.preventDefault(); // Impede o envio do formulário
+      event.preventDefault();
       return;
     }
 
     if (!category) {
       alert('O campo Categoria é obrigatório.');
-      event.preventDefault(); // Impede o envio do formulário
+      event.preventDefault();
       return;
     }
   });

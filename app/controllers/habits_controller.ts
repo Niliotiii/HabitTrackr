@@ -45,6 +45,12 @@ export default class HabitsController {
     return view.render('pages/habitos/add-habits', { categories })
   }
 
+  async edit({ params, view }: HttpContextContract) {
+    const habit = await Habit.findOrFail(params.id)
+    const categories = await Category.all()
+
+    return view.render('pages/habitos/add-habits', { habit, categories })
+  }
   async show({ params, auth, response }: HttpContextContract) {
     const user = auth.user
     const habit = await Habit.query().where('userId', user.id).andWhere('id', params.id).first()
@@ -56,20 +62,19 @@ export default class HabitsController {
     return habit
   }
 
-  async update({ params, request, auth, response }: HttpContextContract) {
-    const user = auth.user
-    const habit = await Habit.query().where('userId', user.id).andWhere('id', params.id).first()
-
-    if (!habit) {
-      return response.notFound({ message: 'Hábito não encontrado' })
-    }
+  async update({ params, request, auth, response, session }: HttpContextContract) {
+    const habit = await Habit.findOrFail(params.id)
 
     const data = request.only(['name', 'description', 'priority', 'status', 'categoryId'])
     habit.merge(data)
-
     await habit.save()
 
-    return habit
+    session.flash('notificacao', {
+      type: 'success',
+      message: `Hábito ${habit.name} atualizado com sucesso!`,
+    })
+
+    return response.redirect().toRoute('habits.index')
   }
 
   async destroy({ params, auth, response }: HttpContextContract) {
