@@ -9,6 +9,7 @@ export default class GoalsController {
     try {
       // Captura os dados enviados do formulário
       const data = request.only([
+        'name',
         'frequencia',
         'quantity',
         'start_date',
@@ -87,6 +88,7 @@ export default class GoalsController {
     }
 
     const data = request.only([
+      'name',
       'frequencia',
       'quantity',
       'start_date',
