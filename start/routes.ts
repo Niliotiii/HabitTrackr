@@ -17,28 +17,26 @@ const HabitController = () => import('#controllers/habits_controller')
 
 // Front
 router.on('/login').render('pages/login')
-router.on('/sign-up').render('pages/sing-up')
-
-
-
-
-
-
-
-
-// Back
-router.post('/login', [AuthController, 'login'])
-router.post('/logout', [AuthController, 'logout'])
+router.on('/register').render('pages/register')
 
 router
   .group(() => {
     router.on('/').render('pages/home')
     router.on('/autor').render('pages/autor')
-    router.get('/logout', 'AuthController.logout')
-
-    router.resource('habits', HabitController).apiOnly()
+    
   })
   .use(middleware.auth())
 
-router.resource('users', UserController).apiOnly()
-router.resource('categories', CategoryController).apiOnly()
+// Back
+router.post('/login', [AuthController, 'login'])
+router.post('/register', [UserController, 'store'])
+
+router
+  .group(() => {
+    router.get('/logout', [AuthController, 'logout'])
+
+    router.resource('users', UserController).apiOnly()
+    router.resource('categories', CategoryController).apiOnly()
+    router.resource('habits', HabitController).apiOnly()
+  })
+  .use(middleware.auth())

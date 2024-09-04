@@ -13,12 +13,15 @@ export default class UserController {
     const data = request.only(['name', 'email', 'password', 'dateOfBirth', 'sex'])
 
     try {
-      const user = await User.create(data)
+      await User.create(data)
 
-      return response.status(201).json(user)
+      return response
+        .send(`<script>alert('Usuário criado com sucesso'); window.location.href='/login';</script>`)
     } catch (error) {
       console.log(error)
-      return response.status(400).json({ error: 'Erro ao criar usuário' })
+      return response
+        .status(400)
+        .send(`<script>alert('Erro ao criar usuário'); window.location.href='/register';</script>`)
     }
   }
 
