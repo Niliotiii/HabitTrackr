@@ -1,12 +1,13 @@
 @layout()
+
 <div class="page-header">
   <h3 class="page-title"> Categorias </h3>
 
-  <a class="btn btn-primary btn-fw" href="{{ route('categories.store') }}">+ Criar Categoria</a>
+  <a class="btn btn-primary btn-fw" href="/categories/new">+ Criar Categoria</a>
 </div>
 
 @flashMessage('notificacao')
-<div class="alert alert-{{ $message.type }}">
+<div class="alert alert-{{ $message.type }} floating-alert" id="flashMessage">
   {{ $message.message }}
 </div>
 @end
@@ -23,24 +24,28 @@
                 <th>Nome</th>
                 <th>Descrição</th>
                 <th>Ativo?</th>
+                <th>Cor</th> <!-- Nova coluna para cor visual -->
                 <th>Opções</th>
               </tr>
             </thead>
             <tbody>
               @if(categories.length === 0)
               <tr>
-                <td colspan="5" class="text-center">
-                    Nenhuma categoria encontrada na base de dados
+                <td colspan="6" class="text-center">
+                  Nenhuma categoria encontrada na base de dados
                 </td>
               </tr>
               @else
               @each((item, index) in categories)
               <tr>
                 <td>{{ index + 1 }}</td>
-                <td>{{ item.nome }}</td>
-                <td>{{ item.descricao }}</td>
-                <td class="text {{ item.ativo ? 'text-success' : 'text-danger' }}">
-                  <i class="mdi  {{ item.ativo ? 'mdi-check-all' : 'mdi-close' }}"></i>
+                <td>{{ item.name }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{item.status == 'active' ? 'Sim' : 'Não'}}</td>
+                <td> <!-- Exibindo a cor visual -->
+                  <div style="display: flex; align-items: center;">
+                    <span style="display: inline-block; width: 20px; height: 20px; background-color: {{ item.visualIdentificationColor }}; border: 1px solid #ccc; margin-right: 8px;"></span>
+                  </div>
                 </td>
                 <td style="display: flex;">
                   <a href="{{ route('categories.edit', [item.id]) }}" class="button mr-1">
@@ -50,7 +55,7 @@
                   <form id="form-delete-{{ item.id }}" method="POST"
                     action="{{ route('categories.destroy', { id: item.id }, { qs: { _method: 'DELETE' } }) }}">
                     {{ csrfField() }}
-                    <a href="#" onclick="document.getElementById('form-delete-{{ item.id }}').submit();">
+                    <a href="#" onclick="confirmDeletion({{ item.id }})">
                       <i class="mdi mdi-delete-variant"></i>
                     </a>
                   </form>
@@ -65,4 +70,40 @@
     </div>
   </div>
 </div>
+
+<style>
+  .floating-alert {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    z-index: 1000;
+    padding: 10px;
+    margin: 0 auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+  }
+</style>
+
+<script>
+  // Função para fazer o alerta desaparecer após 5 segundos
+  setTimeout(() => {
+    const flashMessage = document.querySelector('.floating-alert');
+    if (flashMessage) {
+      flashMessage.style.opacity = '0';
+      setTimeout(() => {
+        flashMessage.remove();
+      }, 500); // Tempo para completar a transição antes de remover o elemento
+    }
+  }, 2000); // 5000ms = 5 segundos
+
+  function confirmDeletion(id) {
+    if (confirm("Tem certeza que deseja excluir esta categoria? Esta ação não pode ser desfeita.")) {
+      document.getElementById(`form-delete-${id}`).submit();
+    }
+  }
+</script>
 @end

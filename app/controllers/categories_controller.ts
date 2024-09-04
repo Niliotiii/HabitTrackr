@@ -3,14 +3,22 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class CategoriesController {
   // Método para criar uma nova categoria
-  async store({ request, response }: HttpContextContract) {
+  async store({ request, response, session }: HttpContextContract) {
     const data = request.only(['name', 'description', 'visualIdentificationColor', 'status'])
 
     try {
       const category = await Category.create(data)
-      return response.status(201).json(category)
+      session.flash('notificacao', {
+        type: 'success',
+        message: `Categoria ${category.name} criada com sucesso!`,
+      })
+      return response.redirect().toRoute('categories.index')
     } catch (error) {
-      return response.status(400).json({ error: 'Erro ao criar a categoria' })
+      session.flash('notificacao', {
+        type: 'danger', // Corrigido para 'danger' em vez de 'success'
+        message: 'Erro ao criar categoria!',
+      })
+      return response.redirect().toRoute('categories.index')
     }
   }
 
@@ -50,7 +58,7 @@ export default class CategoriesController {
     try {
       const category = await Category.findOrFail(params.id)
       await category.delete()
-      return response.status(204).json({})
+      return response.redirect().toRoute('categories.index')
     } catch (error) {
       return response.status(400).json({ error: 'Erro ao deletar a categoria' })
     }

@@ -24,6 +24,9 @@ router
     router.on('/').render('pages/home')
     router.on('/autor').render('pages/autor')
     router.on('/user-edit').render('pages/users/user-edit')
+
+    // Categories
+    router.on('/categories/new').render('pages/categorias/create')
   })
   .use(middleware.auth())
 
@@ -40,6 +43,7 @@ router
 
     router.post('/user-edit/:id', [UserController, 'update'])
     router.post('/user-delete/:id', [UserController, 'destroy'])
+    router.resource('users', UserController).apiOnly()
     router.resource('categories', CategoryController)
     router.resource('habits', HabitController).apiOnly()
   })

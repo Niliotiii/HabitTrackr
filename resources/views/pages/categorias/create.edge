@@ -9,7 +9,7 @@
   <div class="col-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
-        <form class="forms-sample" method="POST"
+        <form class="forms-sample" method="POST" id="categoryForm"
           action="
           {{ !category ?
             route('categories.store') :
@@ -21,7 +21,7 @@
           <div class="form-group">
             <label for="inputName">Nome da Categoria</label>
             <input type="text" class="form-control" id="inputName"
-              value="{{ old('name') || category?.name || '' }}" name="name" placeholder="Informe o nome da categoria">
+              value="{{ old('name') || category?.name || '' }}" name="name" placeholder="Informe o nome da categoria" required>
 
             @inputError('name')
             <span class="text-danger"> {{ $messages.join(', ') }} </span>
@@ -31,38 +31,39 @@
           <div class="form-group">
             <label for="inputDescription">Descrição</label>
             <textarea class="form-control" id="inputDescription" name="description" rows="4"
-              placeholder="Informe uma breve descrição">{{ old('description') || category?.description || '' }}</textarea>
+              placeholder="Informe uma breve descrição" required>{{ old('description') || category?.description || '' }}</textarea>
 
             @inputError('description')
             <span class="text-danger"> {{ $messages.join(', ') }} </span>
             @end
           </div>
 
-          <div class="form-group">
-            <label for="inputColor">Cor de Identificação Visual</label>
-            <input type="color" class="form-control" id="inputColor" name="visualIdentificationColor"
-              value="{{ old('visualIdentificationColor') || category?.visualIdentificationColor || '#000000' }}">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputStatus">Status</label>
+              <select class="form-control" id="inputStatus" name="status">
+                <option value="active" {{ old('status') == 'active' || category?.status == 'active' ? 'selected' : '' }}>
+                  Ativo
+                </option>
+                <option value="inactive" {{ old('status') == 'inactive' || category?.status == 'inactive' ? 'selected' : '' }}>
+                  Inativo
+                </option>
+              </select>
 
-            @inputError('visualIdentificationColor')
-            <span class="text-danger"> {{ $messages.join(', ') }} </span>
-            @end
-          </div>
+              @inputError('status')
+              <span class="text-danger"> {{ $messages.join(', ') }} </span>
+              @end
+            </div>
 
-          <div class="form-group">
-            <label for="inputStatus">Status</label>
-            <select class="form-control" id="inputStatus" name="status">
-              <option value="">Selecione um status</option>
-              <option value="active" {{ old('status') == 'active' || category?.status == 'active' ? 'selected' : '' }}>
-                Ativo
-              </option>
-              <option value="inactive" {{ old('status') == 'inactive' || category?.status == 'inactive' ? 'selected' : '' }}>
-                Inativo
-              </option>
-            </select>
+            <div class="form-group col-md-6">
+              <label for="inputColor">Cor de Identificação Visual</label>
+              <input type="color" class="form-control" id="inputColor" name="visualIdentificationColor"
+                value="{{ old('visualIdentificationColor') || category?.visualIdentificationColor || '#000000' }}">
 
-            @inputError('status')
-            <span class="text-danger"> {{ $messages.join(', ') }} </span>
-            @end
+              @inputError('visualIdentificationColor')
+              <span class="text-danger"> {{ $messages.join(', ') }} </span>
+              @end
+            </div>
           </div>
 
           <button type="submit" class="btn btn-primary mr-2">Salvar</button>
@@ -73,3 +74,24 @@
   </div>
 </div>
 @end
+
+<script>
+  document.getElementById('categoryForm').addEventListener('submit', function(event) {
+    // Pegando os valores dos campos de nome e descrição
+    const name = document.getElementById('inputName').value.trim();
+    const description = document.getElementById('inputDescription').value.trim();
+
+    // Verificando se os campos estão vazios
+    if (!name) {
+      alert('O campo Nome é obrigatório.');
+      event.preventDefault(); // Impede o envio do formulário
+      return;
+    }
+
+    if (!description) {
+      alert('O campo Descrição é obrigatório.');
+      event.preventDefault(); // Impede o envio do formulário
+      return;
+    }
+  });
+</script>
