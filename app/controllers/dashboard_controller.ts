@@ -31,8 +31,8 @@ export default class DashboardController {
           .where('userId', user.id)
 
         const activitiesCount = activities.length
-        const completionPercentage =
-          goal.quantidade > 0 ? (activitiesCount / goal.quantidade) * 100 : 0
+        console.log(activitiesCount, goal.quantity)
+        const completionPercentage = goal.quantity > 0 ? (activitiesCount / goal.quantity) * 100 : 0
 
         return {
           ...goal.toJSON(),

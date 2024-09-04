@@ -69,12 +69,14 @@
               Meta: {{ goal.name }}
             </h4>
             <p class="card-description">
-              Total de Atividades: {{ goal.activitiesCount }}
+              Quantidade Total: {{ goal.quantity }}
+            </p>
+            <p class="card-description">
+              Atividades Realizadas: {{ goal.activitiesCount }}
             </p>
             <p class="card-description">
               Porcentagem de Conclusão: {{ goal.completionPercentage }}%
             </p>
-
             <ul>
               @each((activity, i) in goal.activitiesList)
                 <li>
