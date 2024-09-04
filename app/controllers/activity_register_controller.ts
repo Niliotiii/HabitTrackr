@@ -83,7 +83,7 @@ export default class ActivityRegistersController {
   }
 
   // Função para editar um registro de atividade específico por ID do usuário logado
-  async edit({ params, auth, view }: HttpContextContract) {
+  async edit({ params, auth, view, session, response }: HttpContextContract) {
     const user = auth.user
     const activityRegister = await ActivityRegister.query()
       .where('userId', user.id)
