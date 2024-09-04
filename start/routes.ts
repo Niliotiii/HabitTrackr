@@ -39,7 +39,8 @@ router
     })
 
     router.post('/users/:id', [UserController, 'update'])
-    router.resource('categories', CategoryController).apiOnly()
+    router.resource('users', UserController).apiOnly()
+    router.resource('categories', CategoryController)
     router.resource('habits', HabitController).apiOnly()
   })
   .use(middleware.auth())

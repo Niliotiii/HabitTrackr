@@ -1,0 +1,75 @@
+@layout()
+<div class="page-header">
+  <h3 class="page-title"> Categorias -
+    {{ !category ? 'Nova': `Atualização: ${category.name}` }}
+  </h3>
+</div>
+
+<div class="row">
+  <div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <form class="forms-sample" method="POST"
+          action="
+          {{ !category ?
+            route('categories.store') :
+            route('categories.update', { id: category.id }, { qs: { _method: 'PUT' } })
+          }}">
+
+          {{ csrfField() }}
+
+          <div class="form-group">
+            <label for="inputName">Nome da Categoria</label>
+            <input type="text" class="form-control" id="inputName"
+              value="{{ old('name') || category?.name || '' }}" name="name" placeholder="Informe o nome da categoria">
+
+            @inputError('name')
+            <span class="text-danger"> {{ $messages.join(', ') }} </span>
+            @end
+          </div>
+
+          <div class="form-group">
+            <label for="inputDescription">Descrição</label>
+            <textarea class="form-control" id="inputDescription" name="description" rows="4"
+              placeholder="Informe uma breve descrição">{{ old('description') || category?.description || '' }}</textarea>
+
+            @inputError('description')
+            <span class="text-danger"> {{ $messages.join(', ') }} </span>
+            @end
+          </div>
+
+          <div class="form-group">
+            <label for="inputColor">Cor de Identificação Visual</label>
+            <input type="color" class="form-control" id="inputColor" name="visualIdentificationColor"
+              value="{{ old('visualIdentificationColor') || category?.visualIdentificationColor || '#000000' }}">
+
+            @inputError('visualIdentificationColor')
+            <span class="text-danger"> {{ $messages.join(', ') }} </span>
+            @end
+          </div>
+
+          <div class="form-group">
+            <label for="inputStatus">Status</label>
+            <select class="form-control" id="inputStatus" name="status">
+              <option value="">Selecione um status</option>
+              <option value="active" {{ old('status') == 'active' || category?.status == 'active' ? 'selected' : '' }}>
+                Ativo
+              </option>
+              <option value="inactive" {{ old('status') == 'inactive' || category?.status == 'inactive' ? 'selected' : '' }}>
+                Inativo
+              </option>
+            </select>
+
+            @inputError('status')
+            <span class="text-danger"> {{ $messages.join(', ') }} </span>
+            @end
+          </div>
+
+          <button type="submit" class="btn btn-primary mr-2">Salvar</button>
+          <a href="{{ route('categories.index') }}" class="btn btn-dark">Cancelar</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+@end

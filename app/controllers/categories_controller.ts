@@ -3,7 +3,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class CategoriesController {
   // Método para criar uma nova categoria
-  public async store({ request, response }: HttpContextContract) {
+  async store({ request, response }: HttpContextContract) {
     const data = request.only(['name', 'description', 'visualIdentificationColor', 'status'])
 
     try {
@@ -15,13 +15,14 @@ export default class CategoriesController {
   }
 
   // Método para buscar todas as categorias
-  public async index({}: HttpContextContract) {
+  async index({ view }: HttpContextContract) {
     const categories = await Category.all()
-    return categories
+
+    return view.render('pages/categorias/index', { categories })
   }
 
   // Método para buscar uma categoria por ID
-  public async show({ params, response }: HttpContextContract) {
+  async show({ params, response }: HttpContextContract) {
     try {
       const category = await Category.findOrFail(params.id)
       return category
@@ -31,7 +32,7 @@ export default class CategoriesController {
   }
 
   // Método para editar/atualizar uma categoria
-  public async update({ params, request, response }: HttpContextContract) {
+  async update({ params, request, response }: HttpContextContract) {
     const data = request.only(['name', 'description', 'visualIdentificationColor', 'status'])
 
     try {
@@ -45,7 +46,7 @@ export default class CategoriesController {
   }
 
   // Método para deletar uma categoria
-  public async destroy({ params, response }: HttpContextContract) {
+  async destroy({ params, response }: HttpContextContract) {
     try {
       const category = await Category.findOrFail(params.id)
       await category.delete()

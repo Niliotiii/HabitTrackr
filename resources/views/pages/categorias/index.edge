@@ -1,0 +1,68 @@
+@layout()
+<div class="page-header">
+  <h3 class="page-title"> Categorias </h3>
+
+  <a class="btn btn-primary btn-fw" href="{{ route('categories.store') }}">+ Criar Categoria</a>
+</div>
+
+@flashMessage('notificacao')
+<div class="alert alert-{{ $message.type }}">
+  {{ $message.message }}
+</div>
+@end
+
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Ativo?</th>
+                <th>Opções</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if(categories.length === 0)
+              <tr>
+                <td colspan="5" class="text-center">
+                    Nenhuma categoria encontrada na base de dados
+                </td>
+              </tr>
+              @else
+              @each((item, index) in categories)
+              <tr>
+                <td>{{ index + 1 }}</td>
+                <td>{{ item.nome }}</td>
+                <td>{{ item.descricao }}</td>
+                <td class="text {{ item.ativo ? 'text-success' : 'text-danger' }}">
+                  <i class="mdi  {{ item.ativo ? 'mdi-check-all' : 'mdi-close' }}"></i>
+                </td>
+                <td style="display: flex;">
+                  <a href="{{ route('categories.edit', [item.id]) }}" class="button mr-1">
+                    <i class="mdi mdi-border-color"></i>
+                  </a>
+
+                  <form id="form-delete-{{ item.id }}" method="POST"
+                    action="{{ route('categories.destroy', { id: item.id }, { qs: { _method: 'DELETE' } }) }}">
+                    {{ csrfField() }}
+                    <a href="#" onclick="document.getElementById('form-delete-{{ item.id }}').submit();">
+                      <i class="mdi mdi-delete-variant"></i>
+                    </a>
+                  </form>
+                </td>
+              </tr>
+              @end
+              @endif
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+@end

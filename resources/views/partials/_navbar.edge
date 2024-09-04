@@ -11,12 +11,18 @@
     <ul class="navbar-nav navbar-nav-right">
       <li class="nav-item dropdown">
         <a class="nav-link" id="profileDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-
-            <div class="navbar-profile">
-                <img class="img-xs rounded-circle" src="{{ asset('resources/assets/images/faces/face15.jpg') }}" alt="">
-                <p class="mb-0 d-none d-sm-block navbar-profile-name">{{auth.user.name}}</p>
-                <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+          <div class="d-flex align-items-center">
+            <!-- Iniciais do nome do usuário -->
+            <div class="navbar-profile d-flex align-items-center justify-content-center" style="width: 35px; height: 35px; background-color: #3B8AFF; color: white; border-radius: 50%; text-align: center;">
+              <span class="navbar-profile-initials">
+                {{ auth.user.name.split(' ').map(word => word[0]).join('') }}
+              </span>
             </div>
+            <!-- Nome do usuário -->
+            <p class="mb-0 d-none d-sm-block navbar-profile-name ml-2">{{ auth.user.name }}</p>
+            <!-- Ícone de seta -->
+            <i class="mdi mdi-menu-down d-none d-sm-block ms-2"></i>
+          </div>
         </a>
         <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
             <a class="dropdown-item preview-item" href="/user-edit">
