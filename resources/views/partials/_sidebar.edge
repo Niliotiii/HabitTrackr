@@ -14,32 +14,31 @@
     </li>
 
     <li class="nav-item menu-items">
+        <a class="nav-link" href="{{ route('habits.index') }}">
+          <span class="menu-icon">
+          <!-- Ícone para Hábitos -->
+          <i class="mdi mdi-repeat"></i>
+        </span>
+        <span class="menu-title">Hábitos</span>
+      </a>
+    </li>
+
+    <li class="nav-item menu-items">
         <a class="nav-link" href="/">
           <span class="menu-icon">
-          <i class="mdi mdi-flag-checkered"></i>
+          <i class="mdi mdi-flag-checkered"></i> <!-- Ícone para Metas -->
         </span>
         <span class="menu-title">Metas</span>
       </a>
     </li>
 
-
     <li class="nav-item menu-items">
-      <a class="nav-link" id="menu-dropdown" role="button" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-        <span class="menu-icon">
-          <i class="mdi mdi-security"></i>
+        <a class="nav-link" href="/">
+          <span class="menu-icon">
+          <i class="mdi mdi-run"></i>
         </span>
-        <span class="menu-title">User Pages</span>
-        <i class="menu-arrow"></i>
+        <span class="menu-title">Registrar Atividade</span>
       </a>
-      <div class="collapse" id="auth">
-        <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> <a class="nav-link" href="/"> Blank Page </a></li>
-          <li class="nav-item"> <a class="nav-link" href="/"> 404 </a></li>
-          <li class="nav-item"> <a class="nav-link" href="/"> 500 </a></li>
-          <li class="nav-item"> <a class="nav-link" href="/"> Login </a></li>
-          <li class="nav-item"> <a class="nav-link" href="/"> Register </a></li>
-        </ul>
-      </div>
     </li>
   </ul>
 </nav>

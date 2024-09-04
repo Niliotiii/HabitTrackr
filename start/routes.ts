@@ -45,6 +45,6 @@ router
     router.post('/user-delete/:id', [UserController, 'destroy'])
     router.resource('users', UserController).apiOnly()
     router.resource('categories', CategoryController)
-    router.resource('habits', HabitController).apiOnly()
+    router.resource('habits', HabitController)
   })
   .use(middleware.auth())

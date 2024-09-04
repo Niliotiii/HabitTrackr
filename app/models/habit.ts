@@ -6,36 +6,39 @@ import User from './user.js'
 
 export default class Habit extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  id: number
 
   @column()
-  public name: string
+  name: string
 
   @column()
-  public description: string
+  description: string
 
   @column()
-  public priority: number
+  priority: number
 
   @column()
-  public status: string
+  status: string
 
   @belongsTo(() => User, {
     foreignKey: 'userId',
   })
-  public user: BelongsTo<typeof User>
+  user: BelongsTo<typeof User>
+
+  @column()
+  categoryId: number
 
   @belongsTo(() => Categories, {
     foreignKey: 'categoryId',
   })
-  public category: BelongsTo<typeof Categories>
+  category: BelongsTo<typeof Categories>
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime | null
+  updatedAt: DateTime | null
 
   @column.dateTime({ serializeAs: null })
-  public deletedAt: DateTime | null
+  deletedAt: DateTime | null
 }

@@ -1,9 +1,10 @@
 import Habit from '#models/habit'
+import Category from '#models/category'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class HabitsController {
   // Função para criar um novo hábito
-  public async store({ request, auth, response }: HttpContextContract) {
+  async store({ request, auth, response }: HttpContextContract) {
     const user = auth.user
 
     console.log('user', user)
@@ -20,15 +21,27 @@ export default class HabitsController {
   }
 
   // Função para buscar todos os hábitos do usuário logado
-  public async index({ auth }: HttpContextContract) {
+  async index({ auth, view }: HttpContextContract) {
     const user = auth.user
     const habits = await Habit.query().where('user_id', user.id)
 
-    return habits
+    return view.render('pages/habitos/habitos-list', { habits })
+  }
+  // Método para carregar categorias (pode ser reutilizado por outros métodos)
+  async loadCategories() {
+    const categories = await Category.all()
+    return categories
   }
 
+  // Função para criar um hábito, reutilizando o método de carregar categorias
+  async create({ view }: HttpContextContract) {
+    const categories = await this.loadCategories()
+    return view.render('pages/habitos/add-habits', { categories })
+  }
+
+
   // Função para buscar um hábito específico por ID do usuário logado
-  public async show({ params, auth, response }: HttpContextContract) {
+  async show({ params, auth, response }: HttpContextContract) {
     const user = auth.user
     const habit = await Habit.query().where('userId', user.id).andWhere('id', params.id).first()
 
@@ -40,7 +53,7 @@ export default class HabitsController {
   }
 
   // Função para editar um hábito específico por ID do usuário logado
-  public async update({ params, request, auth, response }: HttpContextContract) {
+  async update({ params, request, auth, response }: HttpContextContract) {
     const user = auth.user
     const habit = await Habit.query().where('userId', user.id).andWhere('id', params.id).first()
 
@@ -57,7 +70,7 @@ export default class HabitsController {
   }
 
   // Função para deletar um hábito específico por ID do usuário logado
-  public async destroy({ params, auth, response }: HttpContextContract) {
+  async destroy({ params, auth, response }: HttpContextContract) {
     const user = auth.user
     const habit = await Habit.query().where('userId', user.id).andWhere('id', params.id).first()
 
