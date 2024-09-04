@@ -9,6 +9,9 @@ export default class Goal extends BaseModel {
   id: number
 
   @column()
+  declare name: string
+
+  @column()
   frequencia: string
 
   @column()
