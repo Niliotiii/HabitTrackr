@@ -8,19 +8,15 @@
     <div class="card">
       <div class="card-body">
         <form class="forms-sample" method="POST" id="goalForm"
-          action="
-          {{ !goal ?
-            route('goals.store') :
-            route('goals.update', { id: goal.id }, { qs: { _method: 'PUT' } })
-          }}">
+          action="{{ !goal ? route('goals.store') : route('goals.update', { id: goal.id }, { qs: { _method: 'PUT' } }) }}">
 
           {{ csrfField() }}
 
           <div class="form-row">
-            <!-- Campo de Frequência desabilitado -->
+            <!-- Campo de Frequência -->
             <div class="form-group col-md-6">
               <label for="inputFrequencia">Frequência</label>
-              <select class="form-control" id="inputFrequencia" name="frequencia" disabled>
+              <select class="form-control" id="inputFrequencia" name="frequencia">
                 <option value="dia" {{ old('frequencia') == 'dia' || goal?.frequencia == 'dia' ? 'selected' : '' }}>Diário</option>
                 <option value="semana" {{ old('frequencia') == 'semana' || goal?.frequencia == 'semana' ? 'selected' : '' }}>Semanal</option>
                 <option value="mes" {{ old('frequencia') == 'mes' || goal?.frequencia == 'mes' ? 'selected' : '' }}>Mensal</option>
@@ -34,7 +30,7 @@
             <!-- Campo de Quantidade (calculado automaticamente) -->
             <div class="form-group col-md-6">
               <label for="inputQuantity">Quantidade</label>
-              <input type="number" class="form-control" id="inputQuantity" name="quantity"
+              <input class="form-control input-quantity" id="inputQuantity" name="quantity"
                 value="{{ old('quantity') || goal?.quantity || '' }}" readonly
                 placeholder="A quantidade será calculada automaticamente">
 
@@ -95,17 +91,18 @@
 @end
 
 <style>
-  /* Estilo para o campo de frequência desabilitado */
-  #inputFrequencia:disabled {
-    background-color: #e9ecef; /* Cor de fundo cinza claro */
-    color: #495057; /* Cor do texto */
-    cursor: not-allowed; /* Cursor indicando que o campo está desativado */
+  /* Estilo para o campo de quantidade em readonly com fundo escuro */
+  .input-quantity[readonly] {
+    background-color: #343a40; /* Fundo escuro */
+    color: #f8f9fa; /* Texto claro */
+    border: 1px solid #495057; /* Borda para combinar com o tema */
   }
 
-  /* Estilo para o campo de quantidade */
-  #inputQuantity[readonly] {
-    background-color: #f8f9fa; /* Cor de fundo mais clara */
-    color: #495057; /* Cor do texto */
+  /* Ajuste para os outros campos, se necessário */
+  .form-control {
+    background-color: #343a40; /* Fundo escuro */
+    color: #f8f9fa; /* Texto claro */
+    border: 1px solid #495057; /* Borda padrão */
   }
 </style>
 
@@ -140,7 +137,8 @@
     document.getElementById('inputQuantity').value = quantity;
   }
 
-  // Listener para quando o usuário mudar as datas
+  // Listener para quando o usuário mudar as datas ou a frequência
+  document.getElementById('inputFrequencia').addEventListener('change', calculateQuantity);
   document.getElementById('inputStartDate').addEventListener('change', calculateQuantity);
   document.getElementById('inputEndDate').addEventListener('change', calculateQuantity);
 
