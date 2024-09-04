@@ -2,42 +2,42 @@ import Category from '#models/category'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class CategorySeeder extends BaseSeeder {
-  public async run() {
-    // Especificando as categorias populares
+  async run() {
+    // Especificando as categorias populares em português
     const categories = [
       {
-        name: 'Exercise',
-        description: 'Physical activities and workouts',
+        name: 'Exercício',
+        description: 'Atividades físicas e treinos',
         visualIdentificationColor: '#FF5733',
         status: 'active',
       },
       {
-        name: 'Reading',
-        description: 'Reading books and articles',
+        name: 'Leitura',
+        description: 'Leitura de livros e artigos',
         visualIdentificationColor: '#33FF57',
         status: 'active',
       },
       {
-        name: 'Meditation',
-        description: 'Mindfulness and meditation practices',
+        name: 'Meditação',
+        description: 'Práticas de mindfulness e meditação',
         visualIdentificationColor: '#3357FF',
         status: 'active',
       },
       {
-        name: 'Diet',
-        description: 'Healthy eating and nutrition',
+        name: 'Dieta',
+        description: 'Alimentação saudável e nutrição',
         visualIdentificationColor: '#FF33A1',
         status: 'active',
       },
       {
-        name: 'Learning',
-        description: 'Acquiring new skills and knowledge',
+        name: 'Aprendizado',
+        description: 'Aquisição de novas habilidades e conhecimentos',
         visualIdentificationColor: '#FFAA33',
         status: 'active',
       },
       {
-        name: 'Sleep',
-        description: 'Improving sleep quality',
+        name: 'Sono',
+        description: 'Melhoria da qualidade do sono',
         visualIdentificationColor: '#AA33FF',
         status: 'active',
       },
