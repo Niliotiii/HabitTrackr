@@ -1,5 +1,5 @@
 {
-  "name": "app-loki-car",
+  "name": "habittrackr",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -60,7 +60,9 @@
     "@vinejs/vine": "^2.1.0",
     "edge.js": "^6.0.1",
     "luxon": "^3.4.4",
+    "material-design-icons": "^3.0.1",
     "mysql2": "^3.9.3",
+    "perfect-scrollbar": "^1.5.5",
     "reflect-metadata": "^0.2.1"
   },
   "eslintConfig": {
