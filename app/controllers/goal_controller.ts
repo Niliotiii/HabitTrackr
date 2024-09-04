@@ -64,26 +64,23 @@ export default class GoalsController {
     return view.render('pages/metas/metas-add', { habits })
   }
 
-  // Função para buscar uma meta específica por ID do usuário logado
-  async show({ params, auth, response }: HttpContextContract) {
+  // Função para editar uma meta específica
+  async edit({ params, auth, view }: HttpContextContract) {
     const user = auth.user
-    const goal = await Goal.query()
-      .where('userId', user.id)
-      .andWhere('id', params.id)
-      .preload('habit')
-      .first()
+    const goal = await Goal.query().where('user_id', user.id).andWhere('id', params.id).preload('habit').first()
 
     if (!goal) {
-      return response.notFound({ message: 'Meta não encontrada' })
+      return view.render('errors/not-found', { message: 'Meta não encontrada' })
     }
 
-    return goal
+    const habits = await this.loadHabits(user.id)
+    return view.render('pages/metas/metas-add', { goal, habits })
   }
 
-  // Função para editar uma meta específica por ID do usuário logado
+  // Função para atualizar uma meta
   async update({ params, request, auth, response, session }: HttpContextContract) {
     const user = auth.user
-    const goal = await Goal.query().where('userId', user.id).andWhere('id', params.id).first()
+    const goal = await Goal.query().where('user_id', user.id).andWhere('id', params.id).first()
 
     if (!goal) {
       session.flash('notificacao', { type: 'danger', message: 'Meta não encontrada!' })
@@ -115,7 +112,7 @@ export default class GoalsController {
   // Função para deletar uma meta específica por ID do usuário logado
   async destroy({ params, auth, response, session }: HttpContextContract) {
     const user = auth.user
-    const goal = await Goal.query().where('userId', user.id).andWhere('id', params.id).first()
+    const goal = await Goal.query().where('user_id', user.id).andWhere('id', params.id).first()
 
     if (!goal) {
       session.flash('notificacao', { type: 'danger', message: 'Meta não encontrada!' })

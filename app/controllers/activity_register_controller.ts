@@ -83,6 +83,31 @@ export default class ActivityRegistersController {
   }
 
   // Função para editar um registro de atividade específico por ID do usuário logado
+  async edit({ params, auth, view }: HttpContextContract) {
+    const user = auth.user
+    const activityRegister = await ActivityRegister.query()
+      .where('userId', user.id)
+      .andWhere('id', params.id)
+      .preload('habit')
+      .first()
+
+    if (!activityRegister) {
+      session.flash('notificacao', {
+        type: 'danger',
+        message: 'Registro de atividade não encontrado!',
+      })
+      return response.redirect().toRoute('activities.index')
+    }
+
+    const habits = await this.loadHabits(user.id)
+
+    return view.render('pages/atividades/atividades-add', {
+      activityRegister,
+      habits,
+    })
+  }
+
+  // Função para atualizar um registro de atividade específico por ID do usuário logado
   async update({ params, request, auth, response, session }: HttpContextContract) {
     const user = auth.user
     const activityRegister = await ActivityRegister.query()
