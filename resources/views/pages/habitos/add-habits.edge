@@ -15,8 +15,8 @@
           <!-- Nome do Hábito -->
           <div class="form-group">
             <label for="inputName">Nome do Hábito</label>
-            <input type="text" class="form-control" id="inputName" 
-              value="{{ old('name') || habit?.name || '' }}" name="name" 
+            <input type="text" class="form-control" id="inputName"
+              value="{{ old('name') || habit?.name || '' }}" name="name"
               placeholder="Informe o nome do hábito" required>
 
             @inputError('name')
@@ -35,7 +35,7 @@
             @end
           </div>
 
-          <!-- Prioridade e Status -->
+          <!-- Prioridade -->
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="inputPriority">Prioridade</label>
@@ -47,35 +47,26 @@
               @end
             </div>
 
+            <!-- Categoria -->
             <div class="form-group col-md-6">
-              <label for="inputStatus">Status</label>
-              <select class="form-control" id="inputStatus" name="status">
-                <option value="active" {{ old('status') == 'active' || habit?.status == 'active' ? 'selected' : '' }}>Ativo</option>
-                <option value="inactive" {{ old('status') == 'inactive' || habit?.status == 'inactive' ? 'selected' : '' }}>Inativo</option>
+              <label for="inputCategory">Categoria</label>
+              <select class="form-control" id="inputCategory" name="categoryId" required>
+                <option value="">Selecione uma categoria</option>
+                @each(category in categories)
+                <option value="{{ category.id }}" {{ old('categoryId') == category.id || habit?.categoryId == category.id ? 'selected' : '' }}>
+                  {{ category.name }}
+                </option>
+                @end
               </select>
 
-              @inputError('status')
+              @inputError('categoryId')
               <span class="text-danger"> {{ $messages.join(', ') }} </span>
               @end
             </div>
           </div>
 
-          <!-- Categoria -->
-          <div class="form-group">
-            <label for="inputCategory">Categoria</label>
-            <select class="form-control" id="inputCategory" name="categoryId" required>
-              <option value="">Selecione uma categoria</option>
-              @each(category in categories)
-              <option value="{{ category.id }}" {{ old('categoryId') == category.id || habit?.categoryId == category.id ? 'selected' : '' }}>
-                {{ category.name }}
-              </option>
-              @end
-            </select>
-
-            @inputError('categoryId')
-            <span class="text-danger"> {{ $messages.join(', ') }} </span>
-            @end
-          </div>
+          <!-- Campo de status oculto -->
+          <input type="hidden" name="status" value="active">
 
           <!-- Botões de ação -->
           <button type="submit" class="btn btn-primary mr-2">Salvar</button>

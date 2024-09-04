@@ -3,7 +3,6 @@ import Habit from '#models/habit'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class GoalsController {
-  // Função para criar uma nova meta
   async store({ request, auth, response, session }: HttpContextContract) {
     const user = auth.user
 
@@ -15,7 +14,6 @@ export default class GoalsController {
         'start_date',
         'end_date',
         'score',
-        'status',
         'habitId',
       ])
 
@@ -23,6 +21,7 @@ export default class GoalsController {
       const goal = new Goal()
       goal.fill(data)
       goal.userId = user.id // Atribui o usuário logado à meta
+      goal.status = 'active' // Define o status como ativo
 
       // Salva a meta no banco de dados
       await goal.save()

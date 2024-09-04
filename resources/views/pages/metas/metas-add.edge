@@ -1,8 +1,6 @@
 @layout()
 <div class="page-header">
-  <h3 class="page-title"> Meta -
-    {{ !goal ? 'Nova': `Atualização: ${goal.frequencia}` }}
-  </h3>
+  <h3 class="page-title"> Meta - {{ !goal ? 'Nova' : `Atualização: ${goal.frequencia}` }} </h3>
 </div>
 
 <div class="row">
@@ -18,24 +16,32 @@
 
           {{ csrfField() }}
 
-          <div class="form-group">
-            <label for="inputFrequencia">Frequência</label>
-            <input type="text" class="form-control" id="inputFrequencia"
-              value="{{ old('frequencia') || goal?.frequencia || '' }}" name="frequencia" placeholder="Informe a frequência da meta" required>
+          <div class="form-row">
+            <!-- Campo de Frequência desabilitado -->
+            <div class="form-group col-md-6">
+              <label for="inputFrequencia">Frequência</label>
+              <select class="form-control" id="inputFrequencia" name="frequencia" disabled>
+                <option value="dia" {{ old('frequencia') == 'dia' || goal?.frequencia == 'dia' ? 'selected' : '' }}>Diário</option>
+                <option value="semana" {{ old('frequencia') == 'semana' || goal?.frequencia == 'semana' ? 'selected' : '' }}>Semanal</option>
+                <option value="mes" {{ old('frequencia') == 'mes' || goal?.frequencia == 'mes' ? 'selected' : '' }}>Mensal</option>
+              </select>
 
-            @inputError('frequencia')
-            <span class="text-danger"> {{ $messages.join(', ') }} </span>
-            @end
-          </div>
+              @inputError('frequencia')
+              <span class="text-danger"> {{ $messages.join(', ') }} </span>
+              @end
+            </div>
 
-          <div class="form-group">
-            <label for="inputQuantity">Quantidade</label>
-            <input type="number" class="form-control" id="inputQuantity" name="quantity"
-              value="{{ old('quantity') || goal?.quantity || '' }}" placeholder="Informe a quantidade da meta" required>
+            <!-- Campo de Quantidade (calculado automaticamente) -->
+            <div class="form-group col-md-6">
+              <label for="inputQuantity">Quantidade</label>
+              <input type="number" class="form-control" id="inputQuantity" name="quantity"
+                value="{{ old('quantity') || goal?.quantity || '' }}" readonly
+                placeholder="A quantidade será calculada automaticamente">
 
-            @inputError('quantity')
-            <span class="text-danger"> {{ $messages.join(', ') }} </span>
-            @end
+              @inputError('quantity')
+              <span class="text-danger"> {{ $messages.join(', ') }} </span>
+              @end
+            </div>
           </div>
 
           <div class="form-row">
@@ -60,31 +66,8 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="inputScore">Pontuação</label>
-            <input type="number" class="form-control" id="inputScore" name="score"
-              value="{{ old('score') || goal?.score || '' }}" placeholder="Informe a pontuação da meta" required>
-
-            @inputError('score')
-            <span class="text-danger"> {{ $messages.join(', ') }} </span>
-            @end
-          </div>
-
-          <div class="form-group">
-            <label for="inputStatus">Status</label>
-            <select class="form-control" id="inputStatus" name="status">
-              <option value="active" {{ old('status') == 'active' || goal?.status == 'active' ? 'selected' : '' }}>
-                Ativo
-              </option>
-              <option value="inactive" {{ old('status') == 'inactive' || goal?.status == 'inactive' ? 'selected' : '' }}>
-                Inativo
-              </option>
-            </select>
-
-            @inputError('status')
-            <span class="text-danger"> {{ $messages.join(', ') }} </span>
-            @end
-          </div>
+          <!-- Pontuação sempre definida como 0 -->
+          <input type="hidden" id="inputScore" name="score" value="0">
 
           <div class="form-group">
             <label for="inputHabit">Hábito</label>
@@ -111,37 +94,66 @@
 </div>
 @end
 
+<style>
+  /* Estilo para o campo de frequência desabilitado */
+  #inputFrequencia:disabled {
+    background-color: #e9ecef; /* Cor de fundo cinza claro */
+    color: #495057; /* Cor do texto */
+    cursor: not-allowed; /* Cursor indicando que o campo está desativado */
+  }
+
+  /* Estilo para o campo de quantidade */
+  #inputQuantity[readonly] {
+    background-color: #f8f9fa; /* Cor de fundo mais clara */
+    color: #495057; /* Cor do texto */
+  }
+</style>
+
 <script>
+  // Calcula a quantidade automaticamente com base na frequência e nas datas
+  function calculateQuantity() {
+    const frequencia = document.getElementById('inputFrequencia').value;
+    const startDate = new Date(document.getElementById('inputStartDate').value);
+    const endDate = new Date(document.getElementById('inputEndDate').value);
+
+    if (!startDate || !endDate || endDate <= startDate) {
+      document.getElementById('inputQuantity').value = 0;
+      return;
+    }
+
+    const timeDiff = Math.abs(endDate - startDate);
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+    let quantity = 0;
+    switch (frequencia) {
+      case 'dia':
+        quantity = daysDiff;
+        break;
+      case 'semana':
+        quantity = Math.ceil(daysDiff / 7);
+        break;
+      case 'mes':
+        quantity = Math.ceil(daysDiff / 30);
+        break;
+    }
+
+    document.getElementById('inputQuantity').value = quantity;
+  }
+
+  // Listener para quando o usuário mudar as datas
+  document.getElementById('inputStartDate').addEventListener('change', calculateQuantity);
+  document.getElementById('inputEndDate').addEventListener('change', calculateQuantity);
+
   document.getElementById('goalForm').addEventListener('submit', function(event) {
-    // Pegando os valores dos campos de frequência, quantidade, pontuação e hábito
-    const frequencia = document.getElementById('inputFrequencia').value.trim();
-    const quantity = document.getElementById('inputQuantity').value.trim();
-    const score = document.getElementById('inputScore').value.trim();
     const habitId = document.getElementById('inputHabit').value;
-
-    // Verificando se os campos estão vazios ou inválidos
-    if (!frequencia) {
-      alert('O campo Frequência é obrigatório.');
-      event.preventDefault(); // Impede o envio do formulário
-      return;
-    }
-
-    if (!quantity || isNaN(quantity) || quantity <= 0) {
-      alert('O campo Quantidade deve ser um número válido.');
-      event.preventDefault(); // Impede o envio do formulário
-      return;
-    }
-
-    if (!score || isNaN(score) || score <= 0) {
-      alert('O campo Pontuação deve ser um número válido.');
-      event.preventDefault(); // Impede o envio do formulário
-      return;
-    }
 
     if (!habitId) {
       alert('O campo Hábito é obrigatório.');
-      event.preventDefault(); // Impede o envio do formulário
+      event.preventDefault();
       return;
     }
   });
+
+  // Iniciar o cálculo da quantidade ao carregar a página (caso existam dados)
+  document.addEventListener('DOMContentLoaded', calculateQuantity);
 </script>

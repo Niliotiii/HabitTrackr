@@ -9,20 +9,33 @@ export default class HabitsController {
     try {
       const data = request.only(['name', 'description', 'priority', 'status', 'categoryId'])
 
+      // Verifica se a categoria existe antes de prosseguir
+      const category = await Category.find(data.categoryId)
+      if (!category) {
+        session.flash('notificacao', {
+          type: 'danger',
+          message: 'Categoria inválida!',
+        })
+        return response.redirect().back()
+      }
+
+      // Criação do novo hábito
       const habit = new Habit()
       habit.fill(data)
-      habit.userId = user.id
+      habit.userId = user?.id
+
       await habit.save()
 
       session.flash('notificacao', {
         type: 'success',
         message: `Hábito ${habit.name} cadastrado com sucesso!`,
       })
-      return response.redirect().toRoute('.index')
+      return response.redirect().toRoute('habits.index')
     } catch (error) {
+      console.error('Erro ao cadastrar hábito:', error)
       session.flash('notificacao', {
         type: 'danger',
-        message: 'Erro ao criar categoria!',
+        message: 'Erro ao cadastrar hábito!',
       })
       return response.redirect().toRoute('habits.index')
     }
