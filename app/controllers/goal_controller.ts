@@ -45,7 +45,10 @@ export default class GoalsController {
   // Função para buscar todas as metas do usuário logado
   async index({ auth, view }: HttpContextContract) {
     const user = auth.user
-    const goals = await Goal.query().where('user_id', user.id).preload('habit')
+    const goals = await Goal.query()
+      .where('user_id', user.id)
+      .preload('habit')
+      .orderBy('created_at', 'desc')
 
     return view.render('pages/metas/metas-list', { goals })
   }
