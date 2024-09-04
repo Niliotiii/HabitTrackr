@@ -1,6 +1,6 @@
 @layout()
 <div class="page-header">
-  <h3 class="page-title"> Meta - {{ !goal ? 'Nova' : `Atualização: ${goal.frequencia}` }} </h3>
+  <h3 class="page-title"> Meta - {{ !goal ? 'Nova' : `Atualização: ${goal.name}` }} </h3>
 </div>
 
 <div class="row">
@@ -11,6 +11,17 @@
           action="{{ !goal ? route('goals.store') : route('goals.update', { id: goal.id }, { qs: { _method: 'PUT' } }) }}">
 
           {{ csrfField() }}
+
+          <!-- Campo de Nome da Meta -->
+          <div class="form-group">
+            <label for="inputName">Nome da Meta</label>
+            <input type="text" class="form-control" id="inputName" name="name"
+              value="{{ old('name') || goal?.name || '' }}" placeholder="Informe o nome da meta" required>
+
+            @inputError('name')
+            <span class="text-danger"> {{ $messages.join(', ') }} </span>
+            @end
+          </div>
 
           <div class="form-row">
             <!-- Campo de Frequência -->
