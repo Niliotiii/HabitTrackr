@@ -2,18 +2,6 @@ import User from '#models/user'
 import { HttpContext } from '@adonisjs/core/http'
 
 export default class AuthController {
-  // async register({ request, auth, response }: HttpContextContract) {
-  //   const { email, password } = request.only(['email', 'password'])
-
-  //   // Cria um novo usuário
-  //   const user = await User.create({ email, password })
-
-  //   // Loga o usuário automaticamente
-  //   await auth.login(user)
-
-  //   return response.redirect('/')
-  // }
-
   async login({ request, auth, response, session }: HttpContext) {
     const { email, password } = request.only(['email', 'password'])
 
@@ -33,9 +21,9 @@ export default class AuthController {
     }
   }
 
-  // async logout({ auth, response }: HttpContextContract) {
-  //   await auth.logout()
+  async logout({ auth, response }: HttpContext) {
+    await auth.use('web').logout()
 
-  //   return response.redirect('/')
-  // }
+    return response.redirect('/')
+  }
 }

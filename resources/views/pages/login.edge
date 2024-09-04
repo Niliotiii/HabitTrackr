@@ -1,4 +1,59 @@
-@layout.base() 
-    teste
-    façadfadf
+
+@layout.base()
+<section style="display: flex; align-items: center; justify-content: center; height: 100vh; background-color: white;">
+   <div style="display: flex; width: 100%; height: 100%;">
+      <div style="width: 50%; display: flex; align-items: center; justify-content: center;">
+         <div style="width: 80%; max-width: 400px;">
+            <div style="box-shadow: none; display: flex; justify-content: center; margin-bottom: 0;">
+               <div style="padding: 20px; background-color: transparent;">
+                  <a href="../../dashboard/index.html" style="display: flex; align-items: center; margin-bottom: 20px;">
+                     <!--Logo start-->
+                     <div style="display: flex; align-items: center;">
+                        <div style="width: 30px; height: 30px; color: #3B8AFF;">
+                           <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor"/>
+                              <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor"/>
+                              <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor"/>
+                              <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor"/>
+                           </svg>
+                        </div>
+                        <h4 style="margin-left: 10px; color: black;">HabitTrackr</h4>
+                     </div>
+                     <!--Logo end-->
+                  </a>
+                  <h2 style="text-align: center; margin-bottom: 10px;">Sign In</h2>
+                  <p style="text-align: center;">Login to stay connected.</p>
+                  <form method="POST" action="/login">
+                    {{ csrfField() }}                  
+                    <div style="margin-bottom: 10px;">
+                       <label for="email" style="display: block; margin-bottom: 5px;">Email</label>
+                       <input type="email" id="email" name="email" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Enter your email">
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                       <label for="password" style="display: block; margin-bottom: 5px;">Password</label>
+                       <input type="password" id="password" name="password" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Enter your password">
+                    </div>
+                    <div style="display: flex; justify-content: center; margin-bottom: 10px;">
+                       <button type="submit" style="padding: 10px 20px; background-color: #3B8AFF; color: white; border: none; border-radius: 5px;">Sign In</button>
+                    </div>                 
+                     <p style="text-align: center; margin-bottom: 10px;">or sign in with other accounts?</p>
+                     <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                        <ul style="display: flex; padding-left: 0; list-style: none;">
+                           <li style="margin-right: 10px;"><a href="#"><img src="{{ asset('resources/assets/images/brands/fb.svg') }}" alt="fb"></a></li>
+                           <li style="margin-right: 10px;"><a href="#"><img src="{{ asset('resources/assets/images/brands/gm.svg') }}" alt="gm"></a></li>
+                           <li style="margin-right: 10px;"><a href="#"><img src="{{ asset('resources/assets/images/brands/im.svg') }}" alt="im"></a></li>
+                           <li><a href="#"><img src="{{ asset('resources/assets/images/brands/li.svg') }}" alt="li"></a></li>
+                        </ul>
+                     </div>
+                     <p style="text-align: center;">Don’t have an account? <a href="sign-up.html" style="text-decoration: underline;">Click here to sign up.</a></p>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div style="width: 50%; background-color: #3B8AFF; overflow: hidden; display: flex; align-items: center;">
+         <img src="{{ asset('resources/assets/images/auth/01.png') }}" style="width: 100%; height: 100%; object-fit: cover;" alt="image">
+      </div>
+   </div>
+</section>
 @end
