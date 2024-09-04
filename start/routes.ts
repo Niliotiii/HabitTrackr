@@ -23,6 +23,7 @@ router
   .group(() => {
     router.on('/').render('pages/home')
     router.on('/autor').render('pages/autor')
+    router.on('/settings').render('pages/auth/settings')
   })
   .use(middleware.auth())
 
