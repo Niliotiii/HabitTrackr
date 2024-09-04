@@ -30,7 +30,7 @@ export default class ActivityRegister extends BaseModel {
   habitId: number
 
   @column()
-  userId: number  // Novo campo para o ID do usuário
+  userId: number
 
   @belongsTo(() => Habit, {
     foreignKey: 'habitId',
