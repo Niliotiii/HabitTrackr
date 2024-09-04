@@ -1,10 +1,11 @@
+// app/Controllers/Http/DashboardController.ts
 import ActivityRegister from '#models/activity-register'
 import Goal from '#models/goal'
 import Habit from '#models/habit'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class DashboardController {
-  async index({ view, auth }: HttpContextContract) {
+  public async index({ view, auth }: HttpContextContract) {
     const user = auth.user!
 
     // Contar o número de registros
@@ -19,24 +20,28 @@ export default class DashboardController {
     const goalsTotal = goalsCountResult[0]?.$extras?.total || 0
     const activitiesTotal = activitiesCountResult[0]?.$extras?.total || 0
 
-    // Obter as metas, incluindo os hábitos e os registros de atividades relacionados
-    const goals = await Goal.query()
-      .where('userId', user.id)
-      .preload('habit', (habitQuery) => {
-        habitQuery.preload('category')
-      })
-      .preload('activities', (activityQuery) => {
-        activityQuery.where('userId', user.id)
-      })
+    // Obter as metas do usuário e calcular as atividades registradas e a porcentagem de conclusão
+    const goals = await Goal.query().where('userId', user.id)
 
-    // Estruturar os dados de metas, hábitos e atividades
-    const goalsDetails = goals.map((goal) => {
-      return {
-        ...goal.toJSON(),
-        habit: goal.habit.toJSON(),
-        activities: goal.activities.map((activity) => activity.toJSON()),
-      }
-    })
+    const goalsDetails = await Promise.all(
+      goals.map(async (goal) => {
+        // Buscar atividades relacionadas a cada meta
+        const activities = await ActivityRegister.query()
+          .where('goalId', goal.id)
+          .where('userId', user.id)
+
+        const activitiesCount = activities.length
+        const completionPercentage =
+          goal.quantidade > 0 ? (activitiesCount / goal.quantidade) * 100 : 0
+
+        return {
+          ...goal.toJSON(),
+          activitiesCount,
+          completionPercentage: completionPercentage.toFixed(2),
+          activitiesList: activities.map((activity) => activity.name),
+        }
+      })
+    )
 
     // Renderizar a view com os dados
     return view.render('pages/home', {
