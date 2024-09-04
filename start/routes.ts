@@ -15,6 +15,7 @@ const CategoryController = () => import('#controllers/categories_controller')
 const AuthController = () => import('#controllers/auth_controller')
 const HabitController = () => import('#controllers/habits_controller')
 const GoalController = () => import('#controllers/goal_controller')
+const ActivityRegister = () => import('#controllers/activity_register_controller')
 
 // Front
 router.on('/login').render('pages/auth/login')
@@ -48,5 +49,6 @@ router
     router.resource('categories', CategoryController)
     router.resource('habits', HabitController)
     router.resource('goals', GoalController)
+    router.resource('activities', ActivityRegister)
   })
   .use(middleware.auth())

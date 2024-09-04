@@ -1,0 +1,145 @@
+@layout()
+<div class="page-header">
+  <h3 class="page-title"> Registrar Atividade -
+    {{ !activityRegister ? 'Nova': `Atualização: ${activityRegister.name}` }}
+  </h3>
+</div>
+
+<div class="row">
+  <div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <form class="forms-sample" method="POST" id="activityForm"
+          action="
+          {{ !activityRegister ?
+            route('activities.store') :
+            route('activities.update', { id: activityRegister.id }, { qs: { _method: 'PUT' } })
+          }}">
+
+          {{ csrfField() }}
+
+          <div class="form-group">
+            <label for="inputName">Nome da Atividade</label>
+            <input type="text" class="form-control" id="inputName"
+              value="{{ old('name') || activityRegister?.name || '' }}" name="name" placeholder="Informe o nome da atividade" required>
+
+            @inputError('name')
+            <span class="text-danger"> {{ $messages.join(', ') }} </span>
+            @end
+          </div>
+
+          <div class="form-group">
+            <label for="inputDescription">Descrição</label>
+            <textarea class="form-control" id="inputDescription" name="description" rows="4"
+              placeholder="Informe uma breve descrição" required>{{ old('description') || activityRegister?.description || '' }}</textarea>
+
+            @inputError('description')
+            <span class="text-danger"> {{ $messages.join(', ') }} </span>
+            @end
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputStartDate">Data de Início</label>
+              <input type="date" class="form-control" id="inputStartDate" name="start_date"
+                value="{{ old('start_date') || activityRegister?.start_date?.toFormat('yyyy-MM-dd') || '' }}" required>
+
+              @inputError('start_date')
+              <span class="text-danger"> {{ $messages.join(', ') }} </span>
+              @end
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="inputEndDate">Data de Fim</label>
+              <input type="date" class="form-control" id="inputEndDate" name="end_date"
+                value="{{ old('end_date') || activityRegister?.end_date?.toFormat('yyyy-MM-dd') || '' }}">
+
+              @inputError('end_date')
+              <span class="text-danger"> {{ $messages.join(', ') }} </span>
+              @end
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="inputDuration">Duração (Horas)</label>
+            <input type="number" class="form-control" id="inputDuration" name="duration_hours"
+              value="{{ old('duration_hours') || activityRegister?.duration_hours || '' }}" placeholder="Informe a duração da atividade" required>
+
+            @inputError('duration_hours')
+            <span class="text-danger"> {{ $messages.join(', ') }} </span>
+            @end
+          </div>
+
+          <div class="form-group">
+            <label for="inputStatus">Status</label>
+            <select class="form-control" id="inputStatus" name="status">
+              <option value="active" {{ old('status') == 'active' || activityRegister?.status == 'active' ? 'selected' : '' }}>
+                Ativo
+              </option>
+              <option value="inactive" {{ old('status') == 'inactive' || activityRegister?.status == 'inactive' ? 'selected' : '' }}>
+                Inativo
+              </option>
+            </select>
+
+            @inputError('status')
+            <span class="text-danger"> {{ $messages.join(', ') }} </span>
+            @end
+          </div>
+
+          <div class="form-group">
+            <label for="inputHabit">Hábito</label>
+            <select class="form-control" id="inputHabit" name="habitId" required>
+              <option value="">Selecione um hábito</option>
+              @each(habit in habits)
+              <option value="{{ habit.id }}" {{ old('habitId') == habit.id || activityRegister?.habitId == habit.id ? 'selected' : '' }}>
+                {{ habit.name }}
+              </option>
+              @end
+            </select>
+
+            @inputError('habitId')
+            <span class="text-danger"> {{ $messages.join(', ') }} </span>
+            @end
+          </div>
+
+          <button type="submit" class="btn btn-primary mr-2">Salvar</button>
+          <a href="{{ route('activities.index') }}" class="btn btn-dark">Cancelar</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+@end
+
+<script>
+  document.getElementById('activityForm').addEventListener('submit', function(event) {
+    const name = document.getElementById('inputName').value.trim();
+    const description = document.getElementById('inputDescription').value.trim();
+    const duration = document.getElementById('inputDuration').value.trim();
+    const habitId = document.getElementById('inputHabit').value;
+
+    if (!name) {
+      alert('O campo Nome é obrigatório.');
+      event.preventDefault();
+      return;
+    }
+
+    if (!description) {
+      alert('O campo Descrição é obrigatório.');
+      event.preventDefault();
+      return;
+    }
+
+    if (!duration || isNaN(duration) || duration <= 0) {
+      alert('O campo Duração deve ser um número válido.');
+      event.preventDefault();
+      return;
+    }
+
+    if (!habitId) {
+      alert('O campo Hábito é obrigatório.');
+      event.preventDefault();
+      return;
+    }
+  });
+</script>

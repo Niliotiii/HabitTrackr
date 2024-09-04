@@ -2,6 +2,7 @@ import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
 import Habit from './habit.js'
+import User from './user.js'
 
 export default class Goal extends BaseModel {
   @column({ isPrimary: true })
@@ -32,6 +33,15 @@ export default class Goal extends BaseModel {
     foreignKey: 'habitId',
   })
   habit: BelongsTo<typeof Habit>
+
+  // Nova coluna e relacionamento com User
+  @column()
+  userId: number
+
+  @belongsTo(() => User, {
+    foreignKey: 'userId',
+  })
+  user: BelongsTo<typeof User>
 
   @column.dateTime({ autoCreate: true })
   createdAt: DateTime
