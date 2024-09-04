@@ -2,7 +2,7 @@ import User from '#models/user'
 import { HttpContext } from '@adonisjs/core/http'
 
 export default class AuthController {
-  async login({ request, auth, response, session }: HttpContext) {
+  async login({ request, auth, response, session, view }: HttpContext) {
     const { email, password } = request.only(['email', 'password'])
 
     try {
@@ -10,20 +10,12 @@ export default class AuthController {
       const user = await User.verifyCredentials(email, password)
       await auth.use('web').login(user)
 
-      // Redireciona para uma rota protegida
-      response.redirect('/')
+      // Redireciona para uma rota protegid
+      return view.render('pages/home', { user })
     } catch (error) {
-      // Define uma mensagem de erro na sessão
-      session.flash({ error: 'Credenciais inválidas. Por favor, tente novamente.' })
-
-      // Redireciona de volta para a página de login
-      response.redirect('back')
+      return response
+        .status(400)
+        .send(`<script>alert('Erro ao fazer login'); window.location.href='/register';</script>`)
     }
-  }
-
-  async logout({ auth, response }: HttpContext) {
-    await auth.use('web').logout()
-
-    return response.redirect('/')
   }
 }

@@ -16,14 +16,13 @@ const AuthController = () => import('#controllers/auth_controller')
 const HabitController = () => import('#controllers/habits_controller')
 
 // Front
-router.on('/login').render('pages/login')
-router.on('/register').render('pages/register')
+router.on('/login').render('pages/auth/login')
+router.on('/register').render('pages/auth/register')
 
 router
   .group(() => {
     router.on('/').render('pages/home')
     router.on('/autor').render('pages/autor')
-    
   })
   .use(middleware.auth())
 
@@ -33,7 +32,10 @@ router.post('/register', [UserController, 'store'])
 
 router
   .group(() => {
-    router.get('/logout', [AuthController, 'logout'])
+    router.get('logout', async ({ auth, response }) => {
+      await auth.use('web').logout()
+      return response.redirect('/login')
+    })
 
     router.resource('users', UserController).apiOnly()
     router.resource('categories', CategoryController).apiOnly()

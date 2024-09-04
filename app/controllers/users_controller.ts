@@ -18,7 +18,6 @@ export default class UserController {
       return response
         .send(`<script>alert('Usuário criado com sucesso'); window.location.href='/login';</script>`)
     } catch (error) {
-      console.log(error)
       return response
         .status(400)
         .send(`<script>alert('Erro ao criar usuário'); window.location.href='/register';</script>`)

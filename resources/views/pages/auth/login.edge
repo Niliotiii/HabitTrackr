@@ -1,4 +1,3 @@
-
 @layout.base()
 <section style="display: flex; align-items: center; justify-content: center; height: 100vh; background-color: white;">
    <div style="display: flex; width: 100%; height: 100%;">
@@ -17,26 +16,26 @@
                               <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor"/>
                            </svg>
                         </div>
-                        <h4 style="margin-left: 10px; color: black;">HabitTrackr</h4>
+                        <h4 style="margin-left: 10px; color: #333;">HabitTrackr</h4>
                      </div>
                      <!--Logo end-->
                   </a>
-                  <h2 style="text-align: center; margin-bottom: 10px;">Sign In</h2>
-                  <p style="text-align: center;">Login to stay connected.</p>
+                  <h2 style="text-align: center; margin-bottom: 10px; color: #333;">Sign In</h2>
+                  <p style="text-align: center; color: #555;">Login to stay connected.</p>
                   <form method="POST" action="/login">
                     {{ csrfField() }}                  
                     <div style="margin-bottom: 10px;">
-                       <label for="email" style="display: block; margin-bottom: 5px;">Email</label>
+                       <label for="email" style="display: block; margin-bottom: 5px; color: #333;">Email</label>
                        <input type="email" id="email" name="email" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Insira seu E-mail">
                     </div>
                     <div style="margin-bottom: 10px;">
-                       <label for="password" style="display: block; margin-bottom: 5px;">Password</label>
+                       <label for="password" style="display: block; margin-bottom: 5px; color: #333;">Password</label>
                        <input type="password" id="password" name="password" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Insira sua Senha">
                     </div>
                     <div style="display: flex; justify-content: center; margin-bottom: 10px;">
                        <button type="submit" style="padding: 10px 20px; background-color: #3B8AFF; color: white; border: none; border-radius: 5px;">Entrar</button>
                     </div>                 
-                     <p style="text-align: center; margin-bottom: 10px;">or sign in with other accounts?</p>
+                     <p style="text-align: center; margin-bottom: 10px; color: #555;">Nos siga em nossas redes</p>
                      <div style="display: flex; justify-content: center; margin-bottom: 20px;">
                         <ul style="display: flex; padding-left: 0; list-style: none;">
                            <li style="margin-right: 10px;"><a href="#"><img src="{{ asset('resources/assets/images/brands/fb.svg') }}" alt="fb"></a></li>
@@ -45,7 +44,7 @@
                            <li><a href="#"><img src="{{ asset('resources/assets/images/brands/li.svg') }}" alt="li"></a></li>
                         </ul>
                      </div>
-                     <p style="text-align: center;">Não possui uma conta?     <a href="/register" style="text-decoration: underline;">Clique aqui para CRIAR UMA!</a></p>
+                     <p style="text-align: center; color: #555;">Não possui uma conta?     <a href="/register" style="text-decoration: underline; color: #3B8AFF;">Clique aqui para CRIAR UMA!</a></p>
                   </form>
                </div>
             </div>
