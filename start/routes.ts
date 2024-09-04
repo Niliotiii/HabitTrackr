@@ -7,8 +7,8 @@
 |
 */
 
-import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
+import router from '@adonisjs/core/services/router'
 
 const UserController = () => import('#controllers/users_controller')
 const CategoryController = () => import('#controllers/categories_controller')
@@ -23,7 +23,7 @@ router
   .group(() => {
     router.on('/').render('pages/home')
     router.on('/autor').render('pages/autor')
-    router.on('/settings').render('pages/auth/settings')
+    router.on('/user-edit').render('pages/users/user-edit')
   })
   .use(middleware.auth())
 
@@ -38,7 +38,7 @@ router
       return response.redirect('/login')
     })
 
-    router.resource('users', UserController).apiOnly()
+    router.post('/users/:id', [UserController, 'update'])
     router.resource('categories', CategoryController).apiOnly()
     router.resource('habits', HabitController).apiOnly()
   })
