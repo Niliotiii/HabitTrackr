@@ -33,6 +33,9 @@ export default class ActivityRegister extends BaseModel {
   @column()
   userId: number
 
+  @column()
+  goalId: number
+
   @belongsTo(() => Habit, {
     foreignKey: 'habitId',
   })

@@ -23,7 +23,7 @@ export default class ActivityRegistersController {
       // Cria um novo registro de atividade
       const activityRegister = new ActivityRegister()
       activityRegister.fill(data)
-      activityRegister.userId = user.id // Atribui o usuário logado ao registro
+      activityRegister.userId = user.id 
 
       // Salva o registro no banco de dados
       await activityRegister.save()
@@ -35,6 +35,7 @@ export default class ActivityRegistersController {
 
       return response.redirect().toRoute('activities.index')
     } catch (error) {
+      console.log(error)
       session.flash('notificacao', {
         type: 'danger',
         message: 'Erro ao criar registro de atividade!',
