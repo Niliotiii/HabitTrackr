@@ -25,7 +25,7 @@
             <p class="card-description">
               Atualize suas informações pessoais ou exclua seu perfil
             </p>
-            <form class="forms-sample" method="POST" action="/user-edit/{{ auth.user.id }}">
+            <form id="profileForm" class="forms-sample" method="POST" action="/user-edit/{{ auth.user.id }}">
               {{ csrfField() }}
               <input type="hidden" name="_method" value="PUT" />
 
@@ -97,12 +97,7 @@
                 <button type="button" class="btn btn-danger ml-auto" onclick="confirmDeletion()">Excluir Perfil</button>
               </div>
             </form>
-            <form
-              id="deleteProfileForm"
-              method="POST"
-              action="/user-delete/{{ auth.user.id }}"
-              style="display: none;"
-            >
+            <form id="deleteProfileForm" method="POST" action="/user-delete/{{ auth.user.id }}" style="display: none;">
               {{ csrfField() }}
               <input type="hidden" name="_method" value="DELETE" />
             </form>
@@ -112,8 +107,37 @@
     </div>
   </div>
 
-  <!-- JavaScript para confirmação de exclusão -->
+  <!-- JavaScript para validação e confirmação de exclusão -->
   <script>
+    document.getElementById("profileForm").addEventListener("submit", function(event) {
+      // Pegando os valores dos campos
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const dateOfBirth = document.getElementById("dateOfBirth").value.trim();
+      const sex = document.getElementById("sex").value;
+      // Verificando se os campos estão vazios
+      if (!name) {
+        alert("O campo Nome é obrigatório.");
+        event.preventDefault(); // Impede o envio do formulário
+        return;
+      }
+      if (!email) {
+        alert("O campo E-mail é obrigatório.");
+        event.preventDefault(); // Impede o envio do formulário
+        return;
+      }
+      if (!dateOfBirth) {
+        alert("O campo Data de Aniversário é obrigatório.");
+        event.preventDefault(); // Impede o envio do formulário
+        return;
+      }
+      if (!sex) {
+        alert("O campo Sexo é obrigatório.");
+        event.preventDefault(); // Impede o envio do formulário
+        return;
+      }
+    });
+    
     function confirmDeletion() {
       if (confirm("Tem certeza que deseja excluir seu perfil? Esta ação não pode ser desfeita.")) {
         document.getElementById("deleteProfileForm").submit();
