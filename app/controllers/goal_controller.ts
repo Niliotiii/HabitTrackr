@@ -133,4 +133,11 @@ export default class GoalsController {
       return response.redirect().toRoute('goals.index')
     }
   }
+
+  // Função para buscar todas as metas de um hábito específico
+  public async getGoalsForHabit({ request }: HttpContextContract) {
+    const habitId = request.input('habitId')
+    const goals = await Goal.query().where('habit_id', habitId)
+    return { goals }
+  }
 }

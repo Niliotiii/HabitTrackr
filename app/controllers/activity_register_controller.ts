@@ -17,6 +17,7 @@ export default class ActivityRegistersController {
         'duration_hours',
         'status',
         'habitId',
+        'goalId',
       ])
 
       // Cria um novo registro de atividade
@@ -131,6 +132,7 @@ export default class ActivityRegistersController {
       'duration_hours',
       'status',
       'habitId',
+      'goalId',
     ])
 
     // Atualiza o registro de atividade com os novos dados

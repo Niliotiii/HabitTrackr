@@ -1,6 +1,7 @@
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
+import Goal from './goal.js'
 import Habit from './habit.js'
 import User from './user.js'
 
@@ -41,6 +42,11 @@ export default class ActivityRegister extends BaseModel {
     foreignKey: 'userId',
   })
   user: BelongsTo<typeof User>
+
+  @belongsTo(() => Goal, {
+    foreignKey: 'goalId',
+  })
+  goal: BelongsTo<typeof Goal>
 
   @column.dateTime({ autoCreate: true })
   createdAt: DateTime

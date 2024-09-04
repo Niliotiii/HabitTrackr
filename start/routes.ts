@@ -48,6 +48,7 @@ router
 
     router.post('/user-edit/:id', [UserController, 'update'])
     router.post('/user-delete/:id', [UserController, 'destroy'])
+    router.get('/api/goals', [GoalController, 'getGoalsForHabit'])
     router.resource('users', UserController).apiOnly()
     router.resource('categories', CategoryController)
     router.resource('habits', HabitController)
