@@ -47,7 +47,7 @@ export default class GoalsController {
     const user = auth.user
     const goals = await Goal.query().where('user_id', user.id).preload('habit')
 
-    return view.render('pages/goals/goals-list', { goals })
+    return view.render('pages/metas/metas-list', { goals })
   }
 
   // Método para carregar os hábitos disponíveis para o usuário
@@ -61,7 +61,7 @@ export default class GoalsController {
     const user = auth.user
     const habits = await this.loadHabits(user.id)
 
-    return view.render('pages/goals/add-goal', { habits })
+    return view.render('pages/metas/metas-add', { habits })
   }
 
   // Função para buscar uma meta específica por ID do usuário logado

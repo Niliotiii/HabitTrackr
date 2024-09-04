@@ -3,7 +3,6 @@ import Category from '#models/category'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class HabitsController {
-  // Função para criar um novo hábito
   async store({ request, auth, response, session }: HttpContextContract) {
     const user = auth.user
 
@@ -12,34 +11,29 @@ export default class HabitsController {
 
       const habit = new Habit()
       habit.fill(data)
-      habit.userId = user.id // Certifique-se de que o campo correto seja 'userId'
-
-      // Salvar o hábito no banco de dados
+      habit.userId = user.id
       await habit.save()
 
       session.flash('notificacao', {
         type: 'success',
         message: `Hábito ${habit.name} cadastrado com sucesso!`,
       })
-      // Retornar o hábito recém-criado como JSON
       return response.redirect().toRoute('.index')
     } catch (error) {
       session.flash('notificacao', {
-        type: 'danger', // Corrigido para 'danger' em vez de 'success'
+        type: 'danger',
         message: 'Erro ao criar categoria!',
       })
       return response.redirect().toRoute('habits.index')
     }
   }
 
-  // Função para buscar todos os hábitos do usuário logado
   async index({ auth, view }: HttpContextContract) {
     const user = auth.user
     const habits = await Habit.query().where('user_id', user.id).preload('category')
 
     return view.render('pages/habitos/habitos-list', { habits })
   }
-  // Método para carregar categorias (pode ser reutilizado por outros métodos)
   async loadCategories() {
     const categories = await Category.all()
     return categories
@@ -51,7 +45,6 @@ export default class HabitsController {
     return view.render('pages/habitos/add-habits', { categories })
   }
 
-  // Função para buscar um hábito específico por ID do usuário logado
   async show({ params, auth, response }: HttpContextContract) {
     const user = auth.user
     const habit = await Habit.query().where('userId', user.id).andWhere('id', params.id).first()
@@ -63,7 +56,6 @@ export default class HabitsController {
     return habit
   }
 
-  // Função para editar um hábito específico por ID do usuário logado
   async update({ params, request, auth, response }: HttpContextContract) {
     const user = auth.user
     const habit = await Habit.query().where('userId', user.id).andWhere('id', params.id).first()
@@ -80,7 +72,6 @@ export default class HabitsController {
     return habit
   }
 
-  // Função para deletar um hábito específico por ID do usuário logado
   async destroy({ params, auth, response }: HttpContextContract) {
     const user = auth.user
     const habit = await Habit.query().where('userId', user.id).andWhere('id', params.id).first()

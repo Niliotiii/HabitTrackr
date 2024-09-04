@@ -1,7 +1,7 @@
 @layout()
 <div class="page-header">
-  <h3 class="page-title"> Hábito -
-    {{ !habit ? 'Novo': `Atualização: ${habit.name}` }}
+  <h3 class="page-title"> Meta -
+    {{ !goal ? 'Nova': `Atualização: ${goal.frequencia}` }}
   </h3>
 </div>
 
@@ -9,80 +9,101 @@
   <div class="col-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
-        <form class="forms-sample" method="POST" id="habitForm"
+        <form class="forms-sample" method="POST" id="goalForm"
           action="
-          {{ !habit ?
-            route('habits.store') :
-            route('habits.update', { id: habit.id }, { qs: { _method: 'PUT' } })
+          {{ !goal ?
+            route('goals.store') :
+            route('goals.update', { id: goal.id }, { qs: { _method: 'PUT' } })
           }}">
 
           {{ csrfField() }}
 
           <div class="form-group">
-            <label for="inputName">Nome do Hábito</label>
-            <input type="text" class="form-control" id="inputName"
-              value="{{ old('name') || habit?.name || '' }}" name="name" placeholder="Informe o nome do hábito" required>
+            <label for="inputFrequencia">Frequência</label>
+            <input type="text" class="form-control" id="inputFrequencia"
+              value="{{ old('frequencia') || goal?.frequencia || '' }}" name="frequencia" placeholder="Informe a frequência da meta" required>
 
-            @inputError('name')
+            @inputError('frequencia')
             <span class="text-danger"> {{ $messages.join(', ') }} </span>
             @end
           </div>
 
           <div class="form-group">
-            <label for="inputDescription">Descrição</label>
-            <textarea class="form-control" id="inputDescription" name="description" rows="4"
-              placeholder="Informe uma breve descrição" required>{{ old('description') || habit?.description || '' }}</textarea>
+            <label for="inputQuantity">Quantidade</label>
+            <input type="number" class="form-control" id="inputQuantity" name="quantity"
+              value="{{ old('quantity') || goal?.quantity || '' }}" placeholder="Informe a quantidade da meta" required>
 
-            @inputError('description')
+            @inputError('quantity')
             <span class="text-danger"> {{ $messages.join(', ') }} </span>
             @end
           </div>
 
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="inputPriority">Prioridade</label>
-              <input type="number" class="form-control" id="inputPriority" name="priority"
-                value="{{ old('priority') || habit?.priority || 1 }}" placeholder="Informe a prioridade do hábito" required>
+              <label for="inputStartDate">Data de Início</label>
+              <input type="date" class="form-control" id="inputStartDate" name="start_date"
+                value="{{ old('start_date') || goal?.start_date?.toFormat('yyyy-MM-dd') || '' }}" required>
 
-              @inputError('priority')
+              @inputError('start_date')
               <span class="text-danger"> {{ $messages.join(', ') }} </span>
               @end
             </div>
 
             <div class="form-group col-md-6">
-              <label for="inputStatus">Status</label>
-              <select class="form-control" id="inputStatus" name="status">
-                <option value="active" {{ old('status') == 'active' || habit?.status == 'active' ? 'selected' : '' }}>
-                  Ativo
-                </option>
-                <option value="inactive" {{ old('status') == 'inactive' || habit?.status == 'inactive' ? 'selected' : '' }}>
-                  Inativo
-                </option>
-              </select>
+              <label for="inputEndDate">Data de Fim</label>
+              <input type="date" class="form-control" id="inputEndDate" name="end_date"
+                value="{{ old('end_date') || goal?.end_date?.toFormat('yyyy-MM-dd') || '' }}">
 
-              @inputError('status')
+              @inputError('end_date')
               <span class="text-danger"> {{ $messages.join(', ') }} </span>
               @end
             </div>
           </div>
+
           <div class="form-group">
-            <label for="inputCategory">Categoria</label>
-            <select class="form-control" id="inputCategory" name="categoryId" required>
-              <option value="">Selecione uma categoria</option>
-              @each(category in categories)
-              <option value="{{ category.id }}" {{ old('categoryId') == category.id || habit?.categoryId == category.id ? 'selected' : '' }}>
-                {{ category.name }}
+            <label for="inputScore">Pontuação</label>
+            <input type="number" class="form-control" id="inputScore" name="score"
+              value="{{ old('score') || goal?.score || '' }}" placeholder="Informe a pontuação da meta" required>
+
+            @inputError('score')
+            <span class="text-danger"> {{ $messages.join(', ') }} </span>
+            @end
+          </div>
+
+          <div class="form-group">
+            <label for="inputStatus">Status</label>
+            <select class="form-control" id="inputStatus" name="status">
+              <option value="active" {{ old('status') == 'active' || goal?.status == 'active' ? 'selected' : '' }}>
+                Ativo
+              </option>
+              <option value="inactive" {{ old('status') == 'inactive' || goal?.status == 'inactive' ? 'selected' : '' }}>
+                Inativo
+              </option>
+            </select>
+
+            @inputError('status')
+            <span class="text-danger"> {{ $messages.join(', ') }} </span>
+            @end
+          </div>
+
+          <div class="form-group">
+            <label for="inputHabit">Hábito</label>
+            <select class="form-control" id="inputHabit" name="habitId" required>
+              <option value="">Selecione um hábito</option>
+              @each(habit in habits)
+              <option value="{{ habit.id }}" {{ old('habitId') == habit.id || goal?.habitId == habit.id ? 'selected' : '' }}>
+                {{ habit.name }}
               </option>
               @end
             </select>
 
-            @inputError('categoryId')
+            @inputError('habitId')
             <span class="text-danger"> {{ $messages.join(', ') }} </span>
             @end
           </div>
 
           <button type="submit" class="btn btn-primary mr-2">Salvar</button>
-          <a href="{{ route('habits.index') }}" class="btn btn-dark">Cancelar</a>
+          <a href="{{ route('goals.index') }}" class="btn btn-dark">Cancelar</a>
         </form>
       </div>
     </div>
@@ -91,34 +112,34 @@
 @end
 
 <script>
-  document.getElementById('habitForm').addEventListener('submit', function(event) {
-    // Pegando os valores dos campos de nome, descrição, prioridade e categoria
-    const name = document.getElementById('inputName').value.trim();
-    const description = document.getElementById('inputDescription').value.trim();
-    const priority = document.getElementById('inputPriority').value.trim();
-    const category = document.getElementById('inputCategory').value;
+  document.getElementById('goalForm').addEventListener('submit', function(event) {
+    // Pegando os valores dos campos de frequência, quantidade, pontuação e hábito
+    const frequencia = document.getElementById('inputFrequencia').value.trim();
+    const quantity = document.getElementById('inputQuantity').value.trim();
+    const score = document.getElementById('inputScore').value.trim();
+    const habitId = document.getElementById('inputHabit').value;
 
     // Verificando se os campos estão vazios ou inválidos
-    if (!name) {
-      alert('O campo Nome é obrigatório.');
+    if (!frequencia) {
+      alert('O campo Frequência é obrigatório.');
       event.preventDefault(); // Impede o envio do formulário
       return;
     }
 
-    if (!description) {
-      alert('O campo Descrição é obrigatório.');
+    if (!quantity || isNaN(quantity) || quantity <= 0) {
+      alert('O campo Quantidade deve ser um número válido.');
       event.preventDefault(); // Impede o envio do formulário
       return;
     }
 
-    if (!priority || isNaN(priority) || priority <= 0) {
-      alert('O campo Prioridade deve ser um número válido.');
+    if (!score || isNaN(score) || score <= 0) {
+      alert('O campo Pontuação deve ser um número válido.');
       event.preventDefault(); // Impede o envio do formulário
       return;
     }
 
-    if (!category) {
-      alert('O campo Categoria é obrigatório.');
+    if (!habitId) {
+      alert('O campo Hábito é obrigatório.');
       event.preventDefault(); // Impede o envio do formulário
       return;
     }
