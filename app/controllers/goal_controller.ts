@@ -29,7 +29,7 @@ export default class GoalsController {
 
       session.flash('notificacao', {
         type: 'success',
-        message: `Meta de ${goal.frequencia} cadastrada com sucesso!`,
+        message: `Meta cadastrada com sucesso!`,
       })
 
       return response.redirect().toRoute('goals.index')
