@@ -4,26 +4,38 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class HabitsController {
   // Função para criar um novo hábito
-  async store({ request, auth, response }: HttpContextContract) {
+  async store({ request, auth, response, session }: HttpContextContract) {
     const user = auth.user
 
-    console.log('user', user)
+    try {
+      const data = request.only(['name', 'description', 'priority', 'status', 'categoryId'])
 
-    const data = request.only(['name', 'description', 'priority', 'status', 'categoryId'])
+      const habit = new Habit()
+      habit.fill(data)
+      habit.userId = user.id // Certifique-se de que o campo correto seja 'userId'
 
-    const habit = new Habit()
-    habit.fill(data)
-    habit.user = user.id
+      // Salvar o hábito no banco de dados
+      await habit.save()
 
-    await habit.save()
-
-    return response.created(habit)
+      session.flash('notificacao', {
+        type: 'success',
+        message: `Hábito ${habit.name} cadastrado com sucesso!`,
+      })
+      // Retornar o hábito recém-criado como JSON
+      return response.redirect().toRoute('.index')
+    } catch (error) {
+      session.flash('notificacao', {
+        type: 'danger', // Corrigido para 'danger' em vez de 'success'
+        message: 'Erro ao criar categoria!',
+      })
+      return response.redirect().toRoute('habits.index')
+    }
   }
 
   // Função para buscar todos os hábitos do usuário logado
   async index({ auth, view }: HttpContextContract) {
     const user = auth.user
-    const habits = await Habit.query().where('user_id', user.id)
+    const habits = await Habit.query().where('user_id', user.id).preload('category')
 
     return view.render('pages/habitos/habitos-list', { habits })
   }
@@ -38,7 +50,6 @@ export default class HabitsController {
     const categories = await this.loadCategories()
     return view.render('pages/habitos/add-habits', { categories })
   }
-
 
   // Função para buscar um hábito específico por ID do usuário logado
   async show({ params, auth, response }: HttpContextContract) {
@@ -78,8 +89,11 @@ export default class HabitsController {
       return response.notFound({ message: 'Hábito não encontrado' })
     }
 
-    await habit.delete()
-
-    return response.noContent()
+    try {
+      await habit.delete()
+      return response.redirect().toRoute('habits.index')
+    } catch (error) {
+      return response.status(400).json({ error: 'Erro ao deletar a categoria' })
+    }
   }
 }

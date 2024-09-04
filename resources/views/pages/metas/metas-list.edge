@@ -1,9 +1,9 @@
 @layout()
 
 <div class="page-header">
-  <h3 class="page-title"> Hábitos </h3>
+  <h3 class="page-title"> Metas </h3>
 
-  <a class="btn btn-primary btn-fw" href="{{ route('habits.create') }}">+ Criar Hábito</a>
+  <a class="btn btn-primary btn-fw" href="{{ route('goals.create') }}">+ Criar Meta</a>
 </div>
 
 @flashMessage('notificacao')
@@ -21,38 +21,42 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Nome</th>
-                <th>Descrição</th>
-                <th>Prioridade</th>
+                <th>Frequência</th>
+                <th>Quantidade</th>
+                <th>Data de Início</th>
+                <th>Data de Fim</th>
+                <th>Pontuação</th>
                 <th>Status</th>
-                <th>Categoria</th>
+                <th>Hábito</th>
                 <th>Opções</th>
               </tr>
             </thead>
             <tbody>
-              @if(habits.length === 0)
+              @if(goals.length === 0)
               <tr>
-                <td colspan="8" class="text-center">
-                  Nenhum hábito encontrado na base de dados
+                <td colspan="9" class="text-center">
+                  Nenhuma meta encontrada na base de dados
                 </td>
               </tr>
               @else
-              @each((habit, index) in habits)
+              @each((goal, index) in goals)
               <tr>
                 <td>{{ index + 1 }}</td>
-                <td>{{ habit.name }}</td>
-                <td>{{ habit.description }}</td>
-                <td>{{ habit.priority }}</td>
-                <td>{{ habit.status == 'active' ? 'Ativo' : 'Inativo' }}</td>
-                <td>{{ habit.category ? habit.category.name : 'Sem Categoria' }}</td>
+                <td>{{ goal.frequencia }}</td>
+                <td>{{ goal.quantity }}</td>
+                <td>{{ goal.start_date.toFormat('dd/MM/yyyy') }}</td>
+                <td>{{ goal.end_date ? goal.end_date.toFormat('dd/MM/yyyy') : 'Indefinido' }}</td>
+                <td>{{ goal.score }}</td>
+                <td>{{ goal.status == 'active' ? 'Ativo' : 'Inativo' }}</td>
+                <td>{{ goal.habit ? goal.habit.name : 'Sem Hábito' }}</td>
                 <td>
-                  <a href="{{ route('habits.edit', [habit.id]) }}" class="button mr-1">
+                  <a href="{{ route('goals.edit', [goal.id]) }}" class="button mr-1">
                     <i class="mdi mdi-border-color"></i>
                   </a>
-                  <form id="form-delete-{{ habit.id }}" method="POST"
-                    action="{{ route('habits.destroy', { id: habit.id }, { qs: { _method: 'DELETE' } }) }}">
+                  <form id="form-delete-{{ goal.id }}" method="POST"
+                    action="{{ route('goals.destroy', { id: goal.id }, { qs: { _method: 'DELETE' } }) }}">
                     {{ csrfField() }}
-                    <a href="#" onclick="confirmDeletion({{ habit.id }})">
+                    <a href="#" onclick="confirmDeletion({{ goal.id }})">
                       <i class="mdi mdi-delete-variant"></i>
                     </a>
                   </form>
@@ -98,7 +102,7 @@
   }, 2000); // 2000ms = 2 segundos
 
   function confirmDeletion(id) {
-    if (confirm("Tem certeza que deseja excluir este hábito? Esta ação não pode ser desfeita.")) {
+    if (confirm("Tem certeza que deseja excluir esta meta? Esta ação não pode ser desfeita.")) {
       document.getElementById(`form-delete-${id}`).submit();
     }
   }

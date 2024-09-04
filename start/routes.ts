@@ -14,6 +14,7 @@ const UserController = () => import('#controllers/users_controller')
 const CategoryController = () => import('#controllers/categories_controller')
 const AuthController = () => import('#controllers/auth_controller')
 const HabitController = () => import('#controllers/habits_controller')
+const GoalController = () => import('#controllers/goal_controller')
 
 // Front
 router.on('/login').render('pages/auth/login')
@@ -46,5 +47,6 @@ router
     router.resource('users', UserController).apiOnly()
     router.resource('categories', CategoryController)
     router.resource('habits', HabitController)
+    router.resource('goals', GoalController)
   })
   .use(middleware.auth())

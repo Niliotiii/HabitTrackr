@@ -20,6 +20,9 @@ export default class Habit extends BaseModel {
   @column()
   status: string
 
+  @column()
+  userId: number
+
   @belongsTo(() => User, {
     foreignKey: 'userId',
   })
