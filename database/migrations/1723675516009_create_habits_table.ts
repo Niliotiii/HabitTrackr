@@ -13,7 +13,7 @@ export default class extends BaseSchema {
       table.string('status', 20).notNullable()
 
       table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
-      table.integer('category_id').unsigned().references('id').inTable('categories').onDelete('CASCADE')
+      table.integer('category_id').unsigned().references('id').inTable('categories')
 
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
