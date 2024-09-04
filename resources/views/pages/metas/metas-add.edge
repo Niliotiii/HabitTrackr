@@ -114,15 +114,18 @@
     const endDateValue = document.getElementById('inputEndDate').value;
 
     // Verificar se as datas estão preenchidas e válidas
-    if (!startDateValue || !endDateValue || new Date(endDateValue) <= new Date(startDateValue)) {
+    if (!startDateValue || !endDateValue || new Date(endDateValue) < new Date(startDateValue)) {
       document.getElementById('inputQuantity').value = 0;
       return;
     }
 
     const startDate = new Date(startDateValue);
     const endDate = new Date(endDateValue);
-    const timeDiff = Math.abs(endDate - startDate);
-    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+    // Calcular a diferença corretamente usando UTC para evitar problemas de fuso horário
+    const timeDiff = Math.abs(Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()) - 
+                              Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()));
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1; // Adiciona 1 para incluir o último dia
 
     let quantity = 0;
     switch (frequencia) {
@@ -151,8 +154,8 @@
     const endDateValue = document.getElementById('inputEndDate').value;
 
     // Verificar se a data de fim é anterior à data de início
-    if (new Date(endDateValue) <= new Date(startDateValue)) {
-      alert('A data de fim deve ser posterior à data de início.');
+    if (new Date(endDateValue) < new Date(startDateValue)) {
+      alert('A data de fim deve ser posterior ou igual à data de início.');
       event.preventDefault();
       return;
     }
